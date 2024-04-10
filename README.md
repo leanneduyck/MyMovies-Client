@@ -12,7 +12,7 @@
     <li>Install Parcel (global): inside project folder, "sudo npm install -g parcel"</li>
     <li>Install Packages+Dependencies: inside project folder, "npm install --save react react-dom"</li>
     <li>Link to "index.html" file: 
-        <li><body></li>
+        <li>body</li>
           <li><div id="root"></div></li>
           <li><script type="module" src="index.jsx"></script></li>
         <li></body></li>
