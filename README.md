@@ -13,9 +13,9 @@
     <li>Install Packages+Dependencies: inside project folder, "npm install --save react react-dom"</li>
     <li>Link to "index.html" file: 
         <li>body</li>
-          <li><div id="root"></div></li>
-          <li><script type="module" src="index.jsx"></script></li>
-        <li></body></li>
+          <li>div id="root"</div></li>
+          <li>script type="module" src="index.jsx"/script</li>
+        <li>/body</li>
         </li>
     <li>Parcel to Build Project (creates "dist" folder): inside project folder, "parcel src/index.html"</li>
   </ul>
