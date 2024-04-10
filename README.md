@@ -1,6 +1,6 @@
 <p>Techs Used:</p>
    <ul>
-     <li>React</li>
+     <li>ReactJS</li>
      <li>Parcel</li>
    </ul>
 <p>Setup Instructions/Commands:</p>
