@@ -11,5 +11,10 @@
     <li>.gitignore: add "node_modules", ".cache", ".parcel-cache"</li>
     <li>Install Parcel (global): inside project folder, "sudo npm install -g parcel"</li>
     <li>Install Packages+Dependencies: inside project folder, "npm install --save react react-dom"</li>
+    <li>Link to "index.html" file: 
+        -<body>
+          -<div id="root"></div>
+          -<script type="module" src="index.jsx"></script>
+        -</body></li>
     <li>Parcel to Build Project (creates "dist" folder): inside project folder, "parcel src/index.html"</li>
   </ul>
