@@ -1,10 +1,4 @@
-created basic src files
-installed Parcel
-
-- parcel src/index.html
-- - auto created dist files
-
- <p>Techs Used:</p>
+<p>Techs Used:</p>
    <ul>
      <li>React</li>
      <li>Parcel</li>
@@ -13,7 +7,7 @@ installed Parcel
   <ul>
     <li>Check Node is Installed: "node -v"</li>
     <li>Initialize "packaged.json" file: inside project folder, "npm init"
-      <p>remove "main: index.js"</p></li>
+      <p>- remove "main: index.js"</p></li>
     <li>.gitignore: add "node_modules", ".cache", ".parcel-cache"</li>
     <li>Install Parcel (global): inside project folder, "sudo npm install -g parcel"</li>
     <li>Install Packages+Dependencies: inside project folder, "npm install --save react react-dom"</li>
