@@ -17,5 +17,5 @@
           <li>---script type="module" src="index.jsx"/script</li>
         <li>-/body</li>
         </li>
-    <li>Parcel to Build Project (creates "dist" folder): inside project folder, "parcel src/index.html"</li>
+    <li>Parcel to Build Project (creates "dist" folder): inside project folder, "parcel src/index.html" (command also used to deploy app every time)</li>
   </ul>
