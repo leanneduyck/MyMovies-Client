@@ -15,7 +15,7 @@
         <li>-body</li>
           <li>---div id="root"</div></li>
           <li>---script type="module" src="index.jsx"/script</li>
-        <li>/-body</li>
+        <li>-/body</li>
         </li>
     <li>Parcel to Build Project (creates "dist" folder): inside project folder, "parcel src/index.html"</li>
   </ul>
