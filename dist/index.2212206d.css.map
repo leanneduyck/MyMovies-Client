@@ -1,13 +1,1 @@
-{
-  "mappings": "AAGA",
-  "sources": [
-    "src/index.scss"
-  ],
-  "sourcesContent": [
-    "$color: steelblue;\n\n/* again, not sure of name below */\n.movie_api {\n  color: $color;\n}\n"
-  ],
-  "names": [],
-  "version": 3,
-  "file": "index.2212206d.css.map",
-  "sourceRoot": "/__parcel_source_root/"
-}
+{"mappings":"AAGA","sources":["src/index.scss"],"sourcesContent":["$color: steelblue;\n\n/* again, not sure of name below */\n.movie_api {\n  color: $color;\n}\n"],"names":[],"version":3,"file":"index.2212206d.css.map","sourceRoot":"/__parcel_source_root/"}

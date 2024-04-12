@@ -1,7 +1,7 @@
 <p>Techs Used:</p>
    <ul>
      <li>ReactJS</li>
-     <li>Parcel</li>
+     <li>Parcel</li>          
    </ul>
 <p>Setup Instructions/Commands:</p>
   <ul>
