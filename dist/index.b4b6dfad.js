@@ -27196,67 +27196,56 @@ var _movieViewJsx = require("../movie-view/movie-view.jsx");
 var _s = $RefreshSig$();
 const MainView = ()=>{
     _s();
-    const [movies, setMovies] = (0, _react.useState)([
-        {
-            id: 1,
-            title: "Harry Potter and the Sorcerer's Stone",
-            release: "2001",
-            description: "An orphaned boy suddenly finds himself a student in a secret magical school.",
-            rating: "PG",
-            genre: {
-                name: "Fantasy",
-                description: "Fantasy is a genre of speculative fiction involving magical elements, typically set in a fictional universe and usually inspired by mythology or folklore."
-            },
-            director: {
-                name: "Chris Columbus",
-                birthYear: "1958",
-                description: "Born in Pennsylvania and raised in Ohio, Chris Columbus was first inspired to make movies after seeing 'The Godfather' at age 15."
-            },
-            image: "https://images.app.goo.gl/SJLbm9exr2bqKhHn7"
-        },
-        {
-            id: 2,
-            title: "Harry Potter and the Chamber of Secrets",
-            release: "2002",
-            description: "An ancient prophecy seems to be coming true when a mysterious presence begins stalking the corridors of a school of magic and leaving its victims paralyzed.",
-            rating: "PG",
-            genre: {
-                name: "Fantasy",
-                description: "Fantasy is a genre of speculative fiction involving magical elements, typically set in a fictional universe and usually inspired by mythology or folklore."
-            },
-            director: {
-                name: "Chris Columbus",
-                birthYear: "1958",
-                description: "Born in Pennsylvania and raised in Ohio, Chris Columbus was first inspired to make movies after seeing 'The Godfather' at age 15."
-            },
-            image: "https://images.app.goo.gl/NM8eTki6DgvMF78JA"
-        },
-        {
-            id: 3,
-            title: "Harry Potter and the Prisoner of Azkaban",
-            release: "2004",
-            description: "Harry Potter, Ron, and Hermione return to Hogwarts School of Witchcraft and Wizardry for their third year of study, where they delve into the mystery of an escaped prisoner who poses a dangerous threat to the young wizard.",
-            rating: "PG-13",
-            genre: {
-                name: "Fantasy",
-                description: "Fantasy is a genre of speculative fiction involving magical elements, typically set in a fictional universe and usually inspired by mythology or folklore."
-            },
-            director: {
-                name: "Alfonso Cuaron",
-                description: "Alfonso Cuaron Orozco was born in Mexico City, Mexico. From and early age, he yearned either to be a film director or an astronaut."
-            },
-            image: "https://images.app.goo.gl/mYUfAPaJwxbKskW58"
-        }
-    ]);
+    const [movies, setMovies] = (0, _react.useState)([]);
+    const [isLoading, setIsLoading] = (0, _react.useState)(true);
     // default state doesn't show movie cards (main-view)
     const [selectedMovie, setSelectedMovie] = (0, _react.useState)(null);
+    // hook to async request list of movies from my API
+    (0, _react.useEffect)(()=>{
+        // isLoading screen to troubleshoot fetching
+        setIsLoading(true);
+        fetch("https://my---movies-868565568c2a.herokuapp.com/movies")// callbacks
+        .then((response)=>response.json()).then((data)=>{
+            console.log(data);
+            // extracts needed info from json
+            const moviesFromApi = data.map((movie)=>{
+                return {
+                    id: movie._id,
+                    title: movie.Title,
+                    release: movie.Release,
+                    description: movie.Description,
+                    rating: movie.Rating,
+                    genre: movie.Genre.Name,
+                    genreDescription: movie.Genre.Description,
+                    directorName: movie.Director.Name,
+                    directorBirthYear: movie.Director.Birthyear,
+                    directorBio: movie.Director.Description,
+                    image: movie.Image
+                };
+            });
+            setMovies(moviesFromApi);
+        })// error handling for troubleshooting
+        .catch((error)=>{
+            console.error("Error fetching data:", error);
+        }).finally(()=>{
+            setIsLoading(false);
+        });
+    }, []);
+    // isLoading screen
+    if (isLoading) return /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
+        children: "Loading..."
+    }, void 0, false, {
+        fileName: "components/main-view/main-view.jsx",
+        lineNumber: 52,
+        columnNumber: 12
+    }, undefined);
     // backClick returns to null state (main-view)
     if (selectedMovie) return /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _movieViewJsx.MovieView), {
         movie: selectedMovie,
         onBackClick: ()=>setSelectedMovie(null)
     }, void 0, false, {
         fileName: "components/main-view/main-view.jsx",
-        lineNumber: 76,
+        lineNumber: 58,
         columnNumber: 7
     }, undefined);
     // returns statement if array is empty
@@ -27264,7 +27253,7 @@ const MainView = ()=>{
         children: "The list is empty!"
     }, void 0, false, {
         fileName: "components/main-view/main-view.jsx",
-        lineNumber: 85,
+        lineNumber: 67,
         columnNumber: 12
     }, undefined);
     // shows movie card when title clicked (movie-view)
@@ -27276,16 +27265,16 @@ const MainView = ()=>{
                 }
             }, movie.id, false, {
                 fileName: "components/main-view/main-view.jsx",
-                lineNumber: 92,
+                lineNumber: 74,
                 columnNumber: 9
             }, undefined))
     }, void 0, false, {
         fileName: "components/main-view/main-view.jsx",
-        lineNumber: 90,
+        lineNumber: 72,
         columnNumber: 5
     }, undefined);
 };
-_s(MainView, "nk2UYG1dnHGMU/9k2GarhRrMUPU=");
+_s(MainView, "d/lby+rGIscstteN7kRoz1cehtg=");
 _c = MainView;
 var _c;
 $RefreshReg$(_c, "MainView");
@@ -27302,11 +27291,12 @@ var prevRefreshSig = window.$RefreshSig$;
 $parcel$ReactRefreshHelpers$5a24.prelude(module);
 
 try {
-// component displays movie title when called``
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "MovieCard", ()=>MovieCard);
 var _jsxDevRuntime = require("react/jsx-dev-runtime");
+var _propTypes = require("prop-types");
+var _propTypesDefault = parcelHelpers.interopDefault(_propTypes);
 const MovieCard = ({ movie, onMovieClick })=>{
     return /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
         onClick: ()=>{
@@ -27315,11 +27305,28 @@ const MovieCard = ({ movie, onMovieClick })=>{
         children: movie.title
     }, void 0, false, {
         fileName: "components/movie-card.jsx",
-        lineNumber: 4,
+        lineNumber: 6,
         columnNumber: 5
     }, undefined);
 };
 _c = MovieCard;
+// define prop constraints for MovieCard
+// did not require all fields, just title, rating, director, I may add image to required later
+MovieCard.propTypes = {
+    movie: (0, _propTypesDefault.default).shape({
+        image: (0, _propTypesDefault.default).string,
+        title: (0, _propTypesDefault.default).string.isRequired,
+        release: (0, _propTypesDefault.default).string,
+        description: (0, _propTypesDefault.default).string,
+        rating: (0, _propTypesDefault.default).string,
+        genreName: (0, _propTypesDefault.default).string,
+        genreDescription: (0, _propTypesDefault.default).string,
+        directorName: (0, _propTypesDefault.default).string.isRequired,
+        directorBirthYear: (0, _propTypesDefault.default).string,
+        directorBio: (0, _propTypesDefault.default).string
+    }).isRequired,
+    onMovieClick: (0, _propTypesDefault.default).func.isRequired
+};
 var _c;
 $RefreshReg$(_c, "MovieCard");
 
@@ -28368,7 +28375,7 @@ const MovieView = ({ movie, onBackClick })=>{
                         columnNumber: 9
                     }, undefined),
                     /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("span", {
-                        children: movie.genre.name
+                        children: movie.genre
                     }, void 0, false, {
                         fileName: "components/movie-view/movie-view.jsx",
                         lineNumber: 25,
@@ -28390,7 +28397,7 @@ const MovieView = ({ movie, onBackClick })=>{
                         columnNumber: 9
                     }, undefined),
                     /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("span", {
-                        children: movie.genre.description
+                        children: movie.genreDescription
                     }, void 0, false, {
                         fileName: "components/movie-view/movie-view.jsx",
                         lineNumber: 29,
@@ -28412,7 +28419,7 @@ const MovieView = ({ movie, onBackClick })=>{
                         columnNumber: 9
                     }, undefined),
                     /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("span", {
-                        children: movie.director.name
+                        children: movie.directorName
                     }, void 0, false, {
                         fileName: "components/movie-view/movie-view.jsx",
                         lineNumber: 33,
@@ -28434,7 +28441,7 @@ const MovieView = ({ movie, onBackClick })=>{
                         columnNumber: 9
                     }, undefined),
                     /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("span", {
-                        children: movie.director.birthYear
+                        children: movie.directorBirthYear
                     }, void 0, false, {
                         fileName: "components/movie-view/movie-view.jsx",
                         lineNumber: 37,
@@ -28456,7 +28463,7 @@ const MovieView = ({ movie, onBackClick })=>{
                         columnNumber: 9
                     }, undefined),
                     /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("span", {
-                        children: movie.director.description
+                        children: movie.directorBio
                     }, void 0, false, {
                         fileName: "components/movie-view/movie-view.jsx",
                         lineNumber: 41,
