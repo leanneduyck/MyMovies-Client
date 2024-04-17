@@ -21,19 +21,19 @@ export const MainView = () => {
       .then((data) => {
         console.log(data);
         // extracts needed info from json
-        const moviesFromApi = (data?.movies ?? []).map((movie) => {
+        const moviesFromApi = data.map((movie) => {
           return {
             id: movie._id,
-            title: movie.title,
-            release: movie.release,
-            description: movie.description,
-            rating: movie.rating,
-            genre: movie.genre?.name,
-            genreDescription: movie.genre.description,
-            directorName: movie.director_name?.[0],
-            directorBirthYear: movie.director?.birthYear,
-            directorBio: movie.director?.description,
-            image: "${movie.img}",
+            title: movie.Title,
+            release: movie.Release,
+            description: movie.Description,
+            rating: movie.Rating,
+            genre: movie.Genre.Name,
+            genreDescription: movie.Genre.Description,
+            directorName: movie.Director.Name,
+            directorBirthYear: movie.Director.Birthyear,
+            directorBio: movie.Director.Description,
+            image: movie.Image,
           };
         });
         setMovies(moviesFromApi);

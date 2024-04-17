@@ -27208,19 +27208,19 @@ const MainView = ()=>{
         .then((response)=>response.json()).then((data)=>{
             console.log(data);
             // extracts needed info from json
-            const moviesFromApi = (data?.movies ?? []).map((movie)=>{
+            const moviesFromApi = data.map((movie)=>{
                 return {
                     id: movie._id,
-                    title: movie.title,
-                    release: movie.release,
-                    description: movie.description,
-                    rating: movie.rating,
-                    genre: movie.genre?.name,
-                    genreDescription: movie.genre.description,
-                    directorName: movie.director_name?.[0],
-                    directorBirthYear: movie.director?.birthYear,
-                    directorBio: movie.director?.description,
-                    image: "${movie.img}"
+                    title: movie.Title,
+                    release: movie.Release,
+                    description: movie.Description,
+                    rating: movie.Rating,
+                    genre: movie.Genre.Name,
+                    genreDescription: movie.Genre.Description,
+                    directorName: movie.Director.Name,
+                    directorBirthYear: movie.Director.Birthyear,
+                    directorBio: movie.Director.Description,
+                    image: movie.Image
                 };
             });
             setMovies(moviesFromApi);
@@ -27318,14 +27318,14 @@ MovieCard.propTypes = {
         title: (0, _propTypesDefault.default).string.isRequired,
         release: (0, _propTypesDefault.default).string,
         description: (0, _propTypesDefault.default).string,
-        rating: (0, _propTypesDefault.default).string.isRequired,
+        rating: (0, _propTypesDefault.default).string,
         genreName: (0, _propTypesDefault.default).string,
         genreDescription: (0, _propTypesDefault.default).string,
         directorName: (0, _propTypesDefault.default).string.isRequired,
         directorBirthYear: (0, _propTypesDefault.default).string,
         directorBio: (0, _propTypesDefault.default).string
     }).isRequired,
-    onBookClick: (0, _propTypesDefault.default).func.isRequired
+    onMovieClick: (0, _propTypesDefault.default).func.isRequired
 };
 var _c;
 $RefreshReg$(_c, "MovieCard");
@@ -28375,7 +28375,7 @@ const MovieView = ({ movie, onBackClick })=>{
                         columnNumber: 9
                     }, undefined),
                     /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("span", {
-                        children: movie.genre.name
+                        children: movie.genre
                     }, void 0, false, {
                         fileName: "components/movie-view/movie-view.jsx",
                         lineNumber: 25,
@@ -28397,7 +28397,7 @@ const MovieView = ({ movie, onBackClick })=>{
                         columnNumber: 9
                     }, undefined),
                     /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("span", {
-                        children: movie.genre.description
+                        children: movie.genreDescription
                     }, void 0, false, {
                         fileName: "components/movie-view/movie-view.jsx",
                         lineNumber: 29,
@@ -28419,7 +28419,7 @@ const MovieView = ({ movie, onBackClick })=>{
                         columnNumber: 9
                     }, undefined),
                     /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("span", {
-                        children: movie.director.name
+                        children: movie.directorName
                     }, void 0, false, {
                         fileName: "components/movie-view/movie-view.jsx",
                         lineNumber: 33,
@@ -28441,7 +28441,7 @@ const MovieView = ({ movie, onBackClick })=>{
                         columnNumber: 9
                     }, undefined),
                     /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("span", {
-                        children: movie.director.birthYear
+                        children: movie.directorBirthYear
                     }, void 0, false, {
                         fileName: "components/movie-view/movie-view.jsx",
                         lineNumber: 37,
@@ -28463,7 +28463,7 @@ const MovieView = ({ movie, onBackClick })=>{
                         columnNumber: 9
                     }, undefined),
                     /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("span", {
-                        children: movie.director.description
+                        children: movie.directorBio
                     }, void 0, false, {
                         fileName: "components/movie-view/movie-view.jsx",
                         lineNumber: 41,
