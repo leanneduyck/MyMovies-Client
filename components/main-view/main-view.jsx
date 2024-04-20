@@ -1,41 +1,62 @@
 // imports other views, imports react states
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { MovieCard } from "/components/movie-card.jsx";
 import { MovieView } from "../movie-view/movie-view.jsx";
+import { LoginView } from "../login-view/login-view.jsx";
+import { SignupView } from "../signup-view/signup-view.jsx";
 
-// exports array to other views, empty array will pull from API
+// exports array to other views, empty array will pull from API, uses localStorage as default values for user/token states
 export const MainView = () => {
+  // views
+  const [user, setUser] = useState(null);
+  const [token, setToken] = useState(null);
   const [movies, setMovies] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-
   // default state doesn't show movie cards (main-view)
   const [selectedMovie, setSelectedMovie] = useState(null);
 
-  // hook to async request list of movies from my API
   useEffect(() => {
-    // isLoading screen to troubleshoot fetching
+    // stores and checks users, tokens
+    const storedUser = JSON.parse(localStorage.getItem("user"));
+    const storedToken = localStorage.getItem("token");
+    setUser(storedUser);
+    setToken(storedToken);
+  }, []);
+
+  // hook to async request list of movies from my API after authorization
+  useEffect(() => {
+    if (!token) return;
+    // isLoading screen
     setIsLoading(true);
-    fetch("https://my---movies-868565568c2a.herokuapp.com/movies")
+    fetch(
+      "https://my---movies-868565568c2a.herokuapp.com/movies",
+      // authorization headers
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    )
       // callbacks
-      .then((response) => response.json())
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Failed to fetch movies");
+        }
+        return response.json();
+      })
       .then((data) => {
-        console.log(data);
         // extracts needed info from json
-        const moviesFromApi = data.map((movie) => {
-          return {
-            id: movie._id,
-            title: movie.Title,
-            release: movie.Release,
-            description: movie.Description,
-            rating: movie.Rating,
-            genre: movie.Genre.Name,
-            genreDescription: movie.Genre.Description,
-            directorName: movie.Director.Name,
-            directorBirthYear: movie.Director.Birthyear,
-            directorBio: movie.Director.Description,
-            image: movie.Image,
-          };
-        });
+        const moviesFromApi = data.map((movie) => ({
+          id: movie._id,
+          title: movie.Title,
+          release: movie.Release,
+          description: movie.Description,
+          rating: movie.Rating,
+          genre: movie.Genre.Name,
+          genreDescription: movie.Genre.Description,
+          directorName: movie.Director.Name,
+          directorBirthYear: movie.Director.Birthyear,
+          directorBio: movie.Director.Description,
+          image: movie.Image,
+        }));
         setMovies(moviesFromApi);
       })
       // error handling for troubleshooting
@@ -45,7 +66,32 @@ export const MainView = () => {
       .finally(() => {
         setIsLoading(false);
       });
-  }, []);
+    // ensures fetch is called every time token changes
+  }, [token]);
+
+  // calls LoginView and SignupView and Login button, stores JWT token as state variable
+  if (!user) {
+    return (
+      <div>
+        <LoginView
+          onLoggedIn={(user, token) => {
+            setUser(user);
+            setToken(token);
+          }}
+        />
+        <SignupView />
+        <button
+          onClick={() => {
+            setUser(null);
+            setToken(null);
+            localStorage.clear();
+          }}
+        >
+          Logout
+        </button>
+      </div>
+    );
+  }
 
   // isLoading screen
   if (isLoading) {
@@ -67,7 +113,7 @@ export const MainView = () => {
     return <div>The list is empty!</div>;
   }
 
-  // shows movie card when title clicked (movie-view)
+  // shows movieCard when title clicked (movie-view)
   return (
     <div>
       {movies.map((movie) => (
@@ -79,6 +125,15 @@ export const MainView = () => {
           }}
         />
       ))}
+      <button
+        onClick={() => {
+          setUser(null);
+          setToken(null);
+          localStorage.clear();
+        }}
+      >
+        Logout
+      </button>
     </div>
   );
 };

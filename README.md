@@ -19,3 +19,16 @@
         </li>
     <li>Parcel to Build Project (creates "dist" folder): inside project folder, "parcel src/index.html" (command also used to deploy app every time)</li>
   </ul>
+  <p>Dependencies:</p>
+  <ul>
+     <li>"parcel": "^2.12.0"</li>
+     <li>"react": "^18.2.0"</li>
+     <li>"react-dom": "^18.2.0"</li>
+  </ul>
+  <p>devDependencies:</p>
+  <ul>
+     <li>"@parcel/transformer-sass": "^2.12.0"</li>
+     <li>"process": "^0.11.10"</li>
+     <li>"prop-types": "^15.8.1"</li>
+  </ul>
+  
