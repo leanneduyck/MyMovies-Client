@@ -24,6 +24,8 @@
      <li>"parcel": "^2.12.0"</li>
      <li>"react": "^18.2.0"</li>
      <li>"react-dom": "^18.2.0"</li>
+     <li>"react-bootstrap": "^2.10.2"</li>
+    <li> "bootstrap": "^5.3.3"</li>
   </ul>
   <p>devDependencies:</p>
   <ul>
@@ -31,4 +33,3 @@
      <li>"process": "^0.11.10"</li>
      <li>"prop-types": "^15.8.1"</li>
   </ul>
-  
