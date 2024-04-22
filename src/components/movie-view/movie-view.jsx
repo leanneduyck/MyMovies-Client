@@ -1,8 +1,12 @@
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
+import Button from "react-bootstrap/Button";
+
 export const MovieView = ({ movie, onBackClick }) => {
   return (
-    <div>
+    <Row className="justify-content-md-center m-5">
       <div>
-        <img src={movie.image} />
+        <img className="w-100" src={movie.image} />
       </div>
       <div>
         <span>Title: </span>
@@ -40,7 +44,9 @@ export const MovieView = ({ movie, onBackClick }) => {
         <span>Director's Bio: </span>
         <span>{movie.directorBio}</span>
       </div>
-      <button onClick={onBackClick}>Back to Home Page</button>
-    </div>
+      <Button className="m-3" variant="primary" onClick={onBackClick}>
+        Back to Home Page
+      </Button>
+    </Row>
   );
 };

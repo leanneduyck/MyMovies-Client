@@ -1,15 +1,20 @@
 import PropTypes from "prop-types";
+import { Button, Card } from "react-bootstrap";
 
-// component displays MovieCard when called``
+// component displays MovieCard when called, uses react-bootstrap``
 export const MovieCard = ({ movie, onMovieClick }) => {
   return (
-    <div
-      onClick={() => {
-        onMovieClick(movie);
-      }}
+    // onClick on Card element makes entire card clickable instead of button
+    <Card
+      className="h-100"
+      style={{ cursor: "pointer" }}
+      onClick={() => onMovieClick(movie)}
     >
-      {movie.title}
-    </div>
+      <Card.Img variant="top" src={movie.image} />
+      <Card.Body>
+        <Card.Title>{movie.description}</Card.Title>
+      </Card.Body>
+    </Card>
   );
 };
 

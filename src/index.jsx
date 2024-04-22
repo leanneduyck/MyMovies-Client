@@ -1,4 +1,5 @@
 import { createRoot } from "react-dom/client";
+import Container from "react-bootstrap/Container";
 
 // import views
 import { MainView } from "../src/components/main-view/main-view.jsx";
@@ -12,10 +13,10 @@ import "./index.scss";
 // main component, will eventually use all others
 const MyMoviesApplication = () => {
   return (
-    // use the name of my backend file here (aka "movie_api"?)
-    <div className="movie_api">
+    // wrap entire app in boostrap Container
+    <Container>
       <MainView />
-    </div>
+    </Container>
   );
 };
 

@@ -1,9 +1,16 @@
 import React from "react";
 import { useState } from "react";
+import Button from "react-bootstrap/Button";
+import Form from "react-bootstrap/Form";
 
 export const SignupView = () => {
-  // prevents default reloading entire page
+  // state variables
+  const [username, setUsername] = useState("");
+  const [birthday, setBirthday] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const handleSubmit = (event) => {
+    // prevents default reloading entire page
     event.preventDefault();
 
     const data = {
@@ -28,64 +35,51 @@ export const SignupView = () => {
       }
     });
   };
-  // state variables
-  const [username, setUsername] = useState("");
-  const [birthday, setBirthday] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
 
   return (
-    <form onSubmit={handleSubmit}>
-      Signup!
-      <div>
-        <label>
-          Username:
-          <input
-            type="text"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            required
-            minLength="5"
-          />
-        </label>
-      </div>
-      <div>
-        <label>
-          Birthday:
-          <input
-            type="date"
-            value={birthday}
-            onChange={(e) => setBirthday(e.target.value)}
-            required
-          />
-        </label>
-      </div>
-      <div>
-        <label>
-          Email:
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-        </label>
-      </div>
-      <div>
-        <label>
-          Password:
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            maxLength="20"
-          />
-        </label>
-      </div>
-      <div>
-        <button type="submit">Submit</button>
-      </div>
-    </form>
+    <Form onSubmit={handleSubmit}>
+      Or, sign up below...
+      <Form.Group controlId="formUsername">
+        <Form.Label>Username:</Form.Label>
+        <Form.Control
+          type="text"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          required
+          minLength="5"
+        />
+      </Form.Group>
+      <Form.Group contolId="formBirthday">
+        <Form.Label>Birthday:</Form.Label>
+        <Form.Control
+          type="date"
+          value={birthday}
+          onChange={(e) => setBirthday(e.target.value)}
+          required
+        />
+      </Form.Group>
+      <Form.Group controlId="formEmail">
+        <Form.Label>Email:</Form.Label>
+        <Form.Control
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+        />
+      </Form.Group>
+      <Form.Group controlId="formPassword">
+        <Form.Label>Password:</Form.Label>
+        <Form.Control
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+          maxLength="20"
+        />
+      </Form.Group>
+      <Button className="m-3" variant="secondary" type="submit">
+        Sign Up!
+      </Button>
+    </Form>
   );
 };

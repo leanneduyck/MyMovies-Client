@@ -1,5 +1,7 @@
 import React from "react";
 import { useState } from "react";
+import Button from "react-bootstrap/Button";
+import Form from "react-bootstrap/Form";
 
 export const LoginView = ({ onLoggedIn }) => {
   // useState for username and pw
@@ -42,41 +44,33 @@ export const LoginView = ({ onLoggedIn }) => {
   };
   return (
     // callback telling API to validate username and pw
-    <form onSubmit={handleSubmit}>
-      {" "}
-      Login!
-      <div>
-        <label>
-          Username:
-          <input
-            // binding: assigning values of form fields to new state variables
-            type="text"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            // required field
-            required
-            // required minlength
-            minLength="5"
-          />
-        </label>
-      </div>
-      <div>
-        <label>
-          Password:
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            // required field
-            required
-            // required maxlength
-            maxLength="20"
-          />
-        </label>
-      </div>
-      <div>
-        <button type="submit">Submit</button>
-      </div>
-    </form>
+    <Form onSubmit={handleSubmit}>
+      Log in here...
+      <Form.Group controlId="formUsername">
+        <Form.Label>Username:</Form.Label>
+        <Form.Control
+          // binding: assigning values of form fields to new state variables
+          type="text"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          required
+          minLength="5"
+        />
+      </Form.Group>
+      <Form.Group controlId="formPassword">
+        <Form.Label>Password:</Form.Label>
+        <Form.Control
+          // binding: assigning values of form fields to new state variables
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+          maxLength="20"
+        />
+      </Form.Group>
+      <Button className="m-3" variant="primary" type="submit">
+        Log In!
+      </Button>
+    </Form>
   );
 };
