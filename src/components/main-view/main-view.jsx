@@ -9,6 +9,7 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
 import Spinner from "react-bootstrap/Spinner";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
 // exports array to other views, empty array will pull from API, uses localStorage as default values for user/token states
 export const MainView = () => {
@@ -17,8 +18,6 @@ export const MainView = () => {
   const [token, setToken] = useState(null);
   const [movies, setMovies] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  // default state doesn't show movie cards (main-view)
-  const [selectedMovie, setSelectedMovie] = useState(null);
 
   useEffect(() => {
     // stores and checks users, tokens
@@ -30,7 +29,7 @@ export const MainView = () => {
 
   // hook to async request list of movies from my API after authorization
   useEffect(() => {
-    if (!token) return;
+    //if (!token) return;
     // isLoading screen
     setIsLoading(true);
     fetch(
@@ -41,12 +40,7 @@ export const MainView = () => {
       }
     )
       // callbacks
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Failed to fetch movies");
-        }
-        return response.json();
-      })
+      .then((response) => response.json())
       .then((data) => {
         // extracts needed info from json
         const moviesFromApi = data.map((movie) => ({
@@ -64,7 +58,7 @@ export const MainView = () => {
         }));
         setMovies(moviesFromApi);
       })
-      // error handling for troubleshooting
+      // error handling
       .catch((error) => {
         console.error("Error fetching data:", error);
       })
@@ -74,61 +68,100 @@ export const MainView = () => {
     // ensures fetch is called every time token changes
   }, [token]);
 
+  // implements state-based routing
+  // passes full array of movies to MovieView
+  // each <Route> has path to matching URL, plus element telling what to render
+  // Navigate used to block unauthorized users from MainView and MovieView
   // returns views using bootstrap Rows ") : ? (" acts as if/return statements
-  // checks if user logged in, then returns loginView/signUpView
-  // shows loading screen
-  // checks for movie list is not empty
-  // displays movieCard with logout button
   return (
-    <Row className="justify-content-md-center">
-      {!user ? (
-        <Col md={5}>
-          <LoginView
-            onLoggedIn={(user, token) => {
-              setUser(user);
-              setToken(token);
-            }}
+    <BrowserRouter>
+      <Row className="justify-content-md-center">
+        <Routes>
+          <Route
+            path="/signup"
+            element={
+              <>
+                {user ? (
+                  <Navigate to="/" />
+                ) : (
+                  <Col md={5}>
+                    <SignupView />
+                  </Col>
+                )}
+              </>
+            }
           />
-          <SignupView />
-        </Col>
-      ) : isLoading ? (
-        <Spinner animation="border" variant="primary" />
-      ) : selectedMovie ? (
-        <Col md={8}>
-          <MovieView
-            movie={selectedMovie}
-            onBackClick={() => setSelectedMovie(null)}
+          <Route
+            path="/login"
+            element={
+              <>
+                {user ? (
+                  <Navigate to="/" />
+                ) : (
+                  <Col md={5}>
+                    <LoginView
+                      onLoggedIn={(user, token) => {
+                        setUser(user);
+                        setToken(token);
+                      }}
+                    />
+                  </Col>
+                )}
+              </>
+            }
           />
-        </Col>
-      ) : movies.length === 0 ? (
-        <div>There are no movies on this list!</div>
-      ) : (
-        <>
-          {movies.map((movie) => (
-            <Col className="mt-3 mb-3" key={movie.id} md={3}>
-              <MovieCard
-                movie={movie}
-                onMovieClick={(newSelectedMovie) => {
-                  setSelectedMovie(newSelectedMovie);
-                }}
-              />
-            </Col>
-          ))}
-          <Button
-            className="m-3"
-            variant="danger"
-            type="submit"
-            // clears localStorage/user/token
-            onClick={() => {
-              setUser(null);
-              setToken(null);
-              localStorage.clear();
-            }}
-          >
-            Log Out!
-          </Button>
-        </>
-      )}
-    </Row>
+          <Route
+            path="/movies/:movieId"
+            element={
+              <>
+                {!user ? (
+                  <Navigate to="/login" replace />
+                ) : movies.length === 0 ? (
+                  <Col>There are no movies on this list!</Col>
+                ) : (
+                  <Col md={8}>
+                    <MovieView movies={movies} />
+                  </Col>
+                )}
+              </>
+            }
+          />
+          <Route
+            path="/"
+            element={
+              <>
+                {!user ? (
+                  <Navigate to="/login" replace />
+                ) : movies.length === 0 ? (
+                  <Col>There are no movies on this list!</Col>
+                ) : (
+                  <>
+                    {movies.map((movie) => (
+                      <Col className="mt-3 mb-3" key={movie.id} md={3}>
+                        <MovieCard movie={movie} />
+                      </Col>
+                    ))}
+                    <Button
+                      className="m-3"
+                      variant="danger"
+                      type="submit"
+                      // clears localStorage/user/token
+                      onClick={() => {
+                        setUser(null);
+                        setToken(null);
+                        localStorage.clear();
+                      }}
+                    >
+                      Log Out!
+                    </Button>
+                  </>
+                )}
+              </>
+            }
+          />
+        </Routes>
+        {isLoading && <Spinner animation="border" variant="primary" />}
+      </Row>
+    </BrowserRouter>
   );
 };

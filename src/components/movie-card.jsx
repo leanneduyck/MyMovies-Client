@@ -1,20 +1,20 @@
+import React from "react";
 import PropTypes from "prop-types";
-import { Button, Card } from "react-bootstrap";
+import { Link } from "react-router-dom";
 
 // component displays MovieCard when called, uses react-bootstrap``
-export const MovieCard = ({ movie, onMovieClick }) => {
+export const MovieCard = ({ movie }) => {
   return (
-    // onClick on Card element makes entire card clickable instead of button
-    <Card
-      className="h-100"
-      style={{ cursor: "pointer" }}
-      onClick={() => onMovieClick(movie)}
-    >
-      <Card.Img variant="top" src={movie.image} />
-      <Card.Body>
-        <Card.Title>{movie.description}</Card.Title>
-      </Card.Body>
-    </Card>
+    // wrapped Card in Link to make whole movieCard clickable
+    // encodeURIComponent replaces non-alphanumeric characters with URL-friendly characters
+    <Link to={"/movies/${encodeURIComponent(movie.id)}"}>
+      <Card className="h-100" style={{ cursor: "pointer" }}>
+        <Card.Img variant="top" src={movie.image} />
+        <Card.Body>
+          <Card.Title>{movie.description}</Card.Title>
+        </Card.Body>
+      </Card>
+    </Link>
   );
 };
 

@@ -1,8 +1,14 @@
 import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
-import Button from "react-bootstrap/Button";
+import { useParams } from "react-router";
+import { Link } from "react-router-dom";
 
-export const MovieView = ({ movie, onBackClick }) => {
+export const MovieView = ({ movies }) => {
+  // accesses bookId url param
+  const { movieId } = useParams();
+
+  // searches all books to render correct one via react-router
+  const movie = movies.find((b) => b.id === movieId);
+
   return (
     <Row className="justify-content-md-center m-5">
       <div>
@@ -44,9 +50,11 @@ export const MovieView = ({ movie, onBackClick }) => {
         <span>Director's Bio: </span>
         <span>{movie.directorBio}</span>
       </div>
-      <Button className="m-3" variant="primary" onClick={onBackClick}>
-        Back to Home Page
-      </Button>
+      <Link to={"/"}>
+        <button className="back-button m-3" variant="primary">
+          Back to Home Page
+        </button>
+      </Link>
     </Row>
   );
 };
