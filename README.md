@@ -18,6 +18,7 @@
         <li>-/body</li>
         </li>
     <li>Parcel to Build Project (creates "dist" folder): inside project folder, "parcel src/index.html" (command also used to deploy app every time)</li>
+     <li>Add state-based router libraries: "sudo npm install react-router react-router-dom --save"</li>
   </ul>
   <p>Dependencies:</p>
   <ul>
@@ -26,6 +27,8 @@
      <li>"react-dom": "^18.2.0"</li>
      <li>"react-bootstrap": "^2.10.2"</li>
     <li> "bootstrap": "^5.3.3"</li>
+     <li>"react-router": "^6.23.0"</li>
+     <li>"react-router-dom": "^6.23.0"</li>
   </ul>
   <p>devDependencies:</p>
   <ul>
