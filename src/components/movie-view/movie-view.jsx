@@ -1,4 +1,6 @@
 import Row from "react-bootstrap/Row";
+import Button from "react-bootstrap/Button";
+import Image from "react-bootstrap/Image";
 import { useParams } from "react-router";
 import { Link } from "react-router-dom";
 
@@ -12,7 +14,7 @@ export const MovieView = ({ movies }) => {
   return (
     <Row className="justify-content-md-center m-5">
       <div>
-        <img className="w-100" src={movie.image} />
+        <Image className="w-100 mb-2" src={movie.image} rounded />
       </div>
       <div>
         <span>Title: </span>
@@ -51,9 +53,14 @@ export const MovieView = ({ movies }) => {
         <span>{movie.directorBio}</span>
       </div>
       <Link to={"/"}>
-        <button className="back-button m-3" variant="primary">
+        <Button
+          className="w-100 m-2"
+          variant="primary"
+          type="submit"
+          style={{ cursor: "pointer" }}
+        >
           Back to Home Page
-        </button>
+        </Button>
       </Link>
     </Row>
   );

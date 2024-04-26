@@ -12,7 +12,7 @@ export const MovieCard = ({ movie }) => {
       <Card className="h-100" style={{ cursor: "pointer" }}>
         <Card.Img variant="top" src={movie.image} />
         <Card.Body>
-          <Card.Title>{movie.description}</Card.Title>
+          <Card.Text>{movie.description}</Card.Text>
         </Card.Body>
       </Card>
     </Link>

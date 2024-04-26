@@ -44,8 +44,7 @@ export const LoginView = ({ onLoggedIn }) => {
   };
   return (
     // callback telling API to validate username and pw
-    <Form onSubmit={handleSubmit}>
-      Log in here...
+    <Form className="m-3" onSubmit={handleSubmit}>
       <Form.Group controlId="formUsername">
         <Form.Label>Username:</Form.Label>
         <Form.Control

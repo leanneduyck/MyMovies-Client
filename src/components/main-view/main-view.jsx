@@ -4,7 +4,7 @@ import { MovieCard } from "../movie-card.jsx";
 import { MovieView } from "../movie-view/movie-view.jsx";
 import { LoginView } from "../login-view/login-view.jsx";
 import { SignupView } from "../signup-view/signup-view.jsx";
-import Container from "react-bootstrap/Container";
+import { NavigationBar } from "../navigation-bar/navigation-bar.jsx";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
@@ -75,6 +75,17 @@ export const MainView = () => {
   // returns views using bootstrap Rows ") : ? (" acts as if/return statements
   return (
     <BrowserRouter>
+      <NavigationBar
+        user={user}
+        onLoggedOut={() => {
+          setUser(null);
+          setToken(null);
+          localStorage.clear();
+        }}
+        setUser={setUser}
+        setToken={setToken}
+      />
+
       <Row className="justify-content-md-center">
         <Routes>
           <Route
@@ -110,6 +121,7 @@ export const MainView = () => {
               </>
             }
           />
+
           <Route
             path="/movies/:movieId"
             element={
@@ -141,19 +153,6 @@ export const MainView = () => {
                         <MovieCard movie={movie} />
                       </Col>
                     ))}
-                    <Button
-                      className="m-3"
-                      variant="danger"
-                      type="submit"
-                      // clears localStorage/user/token
-                      onClick={() => {
-                        setUser(null);
-                        setToken(null);
-                        localStorage.clear();
-                      }}
-                    >
-                      Log Out!
-                    </Button>
                   </>
                 )}
               </>
