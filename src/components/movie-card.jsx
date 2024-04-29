@@ -20,7 +20,6 @@ export const MovieCard = ({ movie }) => {
 };
 
 // define prop constraints for MovieCard
-// did not require all fields, just title, rating, director, I may add image to required later
 MovieCard.propTypes = {
   movie: PropTypes.shape({
     image: PropTypes.string,
@@ -34,5 +33,5 @@ MovieCard.propTypes = {
     directorBirthYear: PropTypes.string,
     directorBio: PropTypes.string,
   }).isRequired,
-  onMovieClick: PropTypes.func.isRequired,
+  onMovieClick: PropTypes.func,
 };

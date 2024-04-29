@@ -8,7 +8,7 @@ export const LoginView = ({ onLoggedIn }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
-  // prevents default reloading entire page
+  // callback telling API to validate username and pw and return JWT
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = {
@@ -16,7 +16,7 @@ export const LoginView = ({ onLoggedIn }) => {
       Password: password,
     };
     // connects to API
-    // my API has no 'login' endpoint...just creating/updating/deleting a user...???
+    // my API has no 'login' endpoint...just creating/updating/deleting a user...??? still able to login at this point
     fetch("https://my---movies-868565568c2a.herokuapp.com/login", {
       method: "POST",
       headers: {
@@ -35,13 +35,15 @@ export const LoginView = ({ onLoggedIn }) => {
           // pass user and token back to mainView to be used in all additional API requests
           onLoggedIn(data.user, data.token);
         } else {
-          alert("No such user.");
+          alert("No such user exists, please sign up.");
         }
       })
+      // error handling
       .catch((e) => {
-        alert("Something went wrong.");
+        alert("Sorry, something went wrong.");
       });
   };
+
   return (
     // callback telling API to validate username and pw
     <Form className="m-3" onSubmit={handleSubmit}>

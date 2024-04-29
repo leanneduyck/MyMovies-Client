@@ -1,15 +1,32 @@
+import React, { useState } from "react";
 import Row from "react-bootstrap/Row";
 import Button from "react-bootstrap/Button";
 import Image from "react-bootstrap/Image";
 import { useParams } from "react-router";
 import { Link } from "react-router-dom";
 
+// state variables
 export const MovieView = ({ movies }) => {
-  // accesses bookId url param
+  // initializes favoriteMovies array
+  const [favoriteMovies, setFavoriteMovies] = useState([]);
+  // accesses movieId url param
   const { movieId } = useParams();
+  // searches all movies to render correct card via react-router
+  const movie = movies.find((movie) => movie.id === movieId);
+  // if no movie is found, return message
+  if (!movie) {
+    return <div>No movie found!</div>;
+  }
 
-  // searches all books to render correct one via react-router
-  const movie = movies.find((b) => b.id === movieId);
+  // adds movie to favoriteMovies array, message to user, or error message if movie already in array
+  const addToFavorites = (movie) => {
+    if (!favoriteMovies.includes(movie.id)) {
+      setFavoriteMovies([...favoriteMovies, movie.id]);
+      alert("This movie has been added to your Favorites!");
+    } else {
+      alert("This movie is already in your Favorites!");
+    }
+  };
 
   return (
     <Row className="justify-content-md-center m-5">
@@ -62,6 +79,17 @@ export const MovieView = ({ movies }) => {
           Back to Home Page
         </Button>
       </Link>
+      <Button
+        className="w-100 m-2"
+        variant="success"
+        type="submit"
+        style={{ cursor: "pointer" }}
+        onClick={() => {
+          addToFavorites(movie);
+        }}
+      >
+        Add to Favorites!
+      </Button>
     </Row>
   );
 };

@@ -5,9 +5,9 @@ import { MovieView } from "../movie-view/movie-view.jsx";
 import { LoginView } from "../login-view/login-view.jsx";
 import { SignupView } from "../signup-view/signup-view.jsx";
 import { NavigationBar } from "../navigation-bar/navigation-bar.jsx";
+import { ProfileView } from "../profile-view/profile-view.jsx";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import Button from "react-bootstrap/Button";
 import Spinner from "react-bootstrap/Spinner";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
@@ -19,13 +19,13 @@ export const MainView = () => {
   const [movies, setMovies] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
+  //stores and checks users, tokens in localStorage
   useEffect(() => {
-    // stores and checks users, tokens
     const storedUser = JSON.parse(localStorage.getItem("user"));
     const storedToken = localStorage.getItem("token");
     setUser(storedUser);
     setToken(storedToken);
-  }, []);
+  }, [token]);
 
   // hook to async request list of movies from my API after authorization
   useEffect(() => {
@@ -34,7 +34,7 @@ export const MainView = () => {
     setIsLoading(true);
     fetch(
       "https://my---movies-868565568c2a.herokuapp.com/movies",
-      // authorization headers
+      //authorization headers
       {
         headers: { Authorization: `Bearer ${token}` },
       }
@@ -128,11 +128,23 @@ export const MainView = () => {
               <>
                 {!user ? (
                   <Navigate to="/login" replace />
-                ) : movies.length === 0 ? (
-                  <Col>There are no movies on this list!</Col>
                 ) : (
                   <Col md={8}>
                     <MovieView movies={movies} />
+                  </Col>
+                )}
+              </>
+            }
+          />
+          <Route
+            path="/users"
+            element={
+              <>
+                {!user ? (
+                  <Navigate to="/users" replace />
+                ) : (
+                  <Col md={5}>
+                    <ProfileView user={user} token={token} />
                   </Col>
                 )}
               </>
@@ -144,8 +156,6 @@ export const MainView = () => {
               <>
                 {!user ? (
                   <Navigate to="/login" replace />
-                ) : movies.length === 0 ? (
-                  <Col>There are no movies on this list!</Col>
                 ) : (
                   <>
                     {movies.map((movie) => (
