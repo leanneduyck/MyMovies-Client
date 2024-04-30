@@ -19,6 +19,7 @@
         </li>
     <li>Parcel to Build Project (creates "dist" folder): inside project folder, "parcel src/index.html" (command also used to deploy app every time)</li>
      <li>Add state-based router libraries: "sudo npm install react-router react-router-dom --save"</li>
+     <li>Install Redux: $ npm install redux --save</li>
   </ul>
   <p>Dependencies:</p>
   <ul>
@@ -35,4 +36,5 @@
      <li>"@parcel/transformer-sass": "^2.12.0"</li>
      <li>"process": "^0.11.10"</li>
      <li>"prop-types": "^15.8.1"</li>
+     <li>"redux": "^4.2.0"</li>
   </ul>
