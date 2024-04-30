@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Row from "react-bootstrap/Row";
 import Button from "react-bootstrap/Button";
 import Image from "react-bootstrap/Image";
@@ -18,7 +18,8 @@ export const MovieView = ({ movies }) => {
     return <div>No movie found!</div>;
   }
 
-  // adds movie to favoriteMovies array, message to user, or error message if movie already in array
+  // adds movie to favoriteMovies array
+  // doesn't seem to add movies to array in profileView, though success alert displays
   const addToFavorites = (movie) => {
     if (!favoriteMovies.includes(movie.id)) {
       setFavoriteMovies([...favoriteMovies, movie.id]);
@@ -27,6 +28,28 @@ export const MovieView = ({ movies }) => {
       alert("This movie is already in your Favorites!");
     }
   };
+  // connects to API, /users/:Username/movies/:MovieID is endpoint to add (POST) movies to FavoriteMovies array
+  // DOES add movies to favoriteMovies array in database! and in correct user (even though profileView still shows 1st user name etc)
+  useEffect(() => {
+    fetch(
+      "https://my---movies-868565568c2a.herokuapp.com/users/:Username/movies/:MovieID",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    )
+      .then((response) => {
+        if (response.ok) {
+          addToFavorites(movie);
+        }
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+        alert("Error adding movie to Favorites!");
+      });
+  }, []);
 
   return (
     <Row className="justify-content-md-center m-5">
@@ -34,54 +57,53 @@ export const MovieView = ({ movies }) => {
         <Image className="w-100 mb-2" src={movie.image} rounded />
       </div>
       <div>
-        <span>Title: </span>
+        <span style={{ fontWeight: "bold" }}>Title: </span>
         <span>{movie.title}</span>
       </div>
       <div>
-        <span>Release: </span>
+        <span style={{ fontWeight: "bold" }}>Release: </span>
         <span>{movie.release}</span>
       </div>
       <div>
-        <span>Description: </span>
+        <span style={{ fontWeight: "bold" }}>Description: </span>
         <span>{movie.description}</span>
       </div>
       <div>
-        <span>Rating: </span>
+        <span style={{ fontWeight: "bold" }}>Rating: </span>
         <span>{movie.rating}</span>
       </div>
       <div>
-        <span>Genre: </span>
+        <span style={{ fontWeight: "bold" }}>Genre: </span>
         <span>{movie.genre}</span>
       </div>
       <div>
-        <span>Genre Description: </span>
+        <span style={{ fontWeight: "bold" }}>Genre Description: </span>
         <span>{movie.genreDescription}</span>
       </div>
       <div>
-        <span>Director: </span>
+        <span style={{ fontWeight: "bold" }}>Director: </span>
         <span>{movie.directorName}</span>
       </div>
       <div>
-        <span>Director's Birth Year: </span>
+        <span style={{ fontWeight: "bold" }}>Director's Birth Year: </span>
         <span>{movie.directorBirthYear}</span>
       </div>
       <div>
-        <span>Director's Bio: </span>
+        <span style={{ fontWeight: "bold" }}>Director's Bio: </span>
         <span>{movie.directorBio}</span>
       </div>
-      <Link to={"/"}>
-        <Button
-          className="w-100 m-2"
-          variant="primary"
-          type="submit"
-          style={{ cursor: "pointer" }}
-        >
-          Back to Home Page
-        </Button>
-      </Link>
       <Button
         className="w-100 m-2"
-        variant="success"
+        variant="outline-primary"
+        type="submit"
+        style={{ cursor: "pointer" }}
+        href="/"
+      >
+        Back to Home Page
+      </Button>
+      <Button
+        className="w-100 m-2"
+        variant="outline-secondary"
         type="submit"
         style={{ cursor: "pointer" }}
         onClick={() => {

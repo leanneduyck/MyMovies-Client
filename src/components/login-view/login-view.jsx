@@ -35,7 +35,9 @@ export const LoginView = ({ onLoggedIn }) => {
           // pass user and token back to mainView to be used in all additional API requests
           onLoggedIn(data.user, data.token);
         } else {
-          alert("No such user exists, please sign up.");
+          alert(
+            "Please double check your Username and Password. Or if you are new, please Sign Up!."
+          );
         }
       })
       // error handling

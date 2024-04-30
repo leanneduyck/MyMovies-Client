@@ -8,7 +8,11 @@ export const MovieCard = ({ movie }) => {
   return (
     // wrapped Card in Link to make whole movieCard clickable
     // encodeURIComponent replaces non-alphanumeric characters with URL-friendly characters
-    <Link to={`/movies/${encodeURIComponent(movie.id)}`}>
+    // added css textDecoration to remove automatic underlining
+    <Link
+      to={`/movies/${encodeURIComponent(movie.id)}`}
+      style={{ textDecoration: "none" }}
+    >
       <Card className="h-100" style={{ cursor: "pointer" }}>
         <Card.Img variant="top" src={movie.image} />
         <Card.Body>

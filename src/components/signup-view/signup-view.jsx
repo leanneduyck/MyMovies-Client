@@ -9,6 +9,7 @@ export const SignupView = () => {
   const [birthday, setBirthday] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
   const handleSubmit = (event) => {
     // prevents default reloading entire page
     event.preventDefault();
@@ -20,6 +21,7 @@ export const SignupView = () => {
       Password: password,
     };
     // connects to API user signup endpoint
+    // does successfully add a new user to database
     fetch("https://my---movies-868565568c2a.herokuapp.com/users/create", {
       method: "POST",
       body: JSON.stringify(data),
@@ -29,7 +31,8 @@ export const SignupView = () => {
     }).then((response) => {
       if (response.ok) {
         alert("You're signed up!");
-        window.location.reload();
+        // redirects to login page after signup
+        window.location.href = "/login";
       } else {
         alert("Sorry, signup failed.");
       }

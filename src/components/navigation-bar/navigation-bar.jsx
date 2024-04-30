@@ -45,12 +45,16 @@ export const NavigationBar = ({ user, onLoggedOut, setUser, setToken }) => {
             )}
           </Nav>
           <Form inline>
-            <span>
-              <FormControl type="text" placeholder="Search" className="m-2" />
-            </span>
-            <span>
-              <Button variant="outline-light">Search</Button>
-            </span>
+            <div style={{ display: "flex" }}>
+              <span>
+                <FormControl type="text" placeholder="Search" />
+              </span>
+              <span>
+                <Button variant="outline-light" className="mx-3">
+                  Search
+                </Button>
+              </span>
+            </div>
           </Form>
         </Navbar.Collapse>
       </Container>
