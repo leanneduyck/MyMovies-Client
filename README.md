@@ -1,7 +1,14 @@
+<p>This is an app built using ReactJS.</p>
+<p>An un-logged-in user sees MainView with LoginView or SignupView in the NavBar.</p>
+<p>A logged-in user sees MainView with Home or ProfileView or Logout in the NavBar. At this point, MainView displays all the MovieCards. If a user clicks on a MovieCard, the user sees MovieView with complete details on the movie/director/etc, as well as a button to return to MainView and a button to add that movie to FavoriteMovies.</p>
+<p>Within the ProfileView, a user will see the user's current data as well as a button to edit that data. Upon clicking the button, the user can edit the data. In the editing view, there is also the option to delete the user's account. Also in ProfileView, the user sees all the movies on the user's FavoriteMovies array. The user can delete movies from the array from here.</p>
+<p>All of this is tied into MyMovies-Server repo, which is a RESTful API built using CRUD and includes user authentication. The database is on MongoDB Atlas. The app is hosted via Heroku.</p>
+<p>The UI is built using React Bootstrap.</p>
 <p>Techs Used:</p>
    <ul>
      <li>ReactJS</li>
-     <li>Parcel</li>          
+     <li>Parcel</li>   
+     <li>React Bootstrap</li>       
    </ul>
 <p>Setup Instructions/Commands:</p>
   <ul>
