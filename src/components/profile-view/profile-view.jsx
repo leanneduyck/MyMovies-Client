@@ -5,10 +5,15 @@ import { Spinner, Form, Button, Row, Col } from "react-bootstrap";
 // profileView component: user profile, updated profile, and favorite movies
 export const ProfileView = ({movies}) => {
   // state variables
-  const [user, setUser] = useState([]);
+  const [user, setUser] = useState({});
   const [token, setToken] = useState();
   const [favoriteMovies, setFavoriteMovies] = useState([]);
-  const [userData, setUserData] = useState(null);
+  const [userData, setUserData] = useState({
+    Username: '',
+    Email: '',
+    Password: '',
+    Birthday: ''
+  });
   const [isEditing, setIsEditing] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -29,14 +34,15 @@ export const ProfileView = ({movies}) => {
       .then((response) => response.json())
       // extracts needed info from json
       .then((data) => {
-        const userData = data.find((user) => user._id === parsedUser._id);
-        if(!userData){
+        const foundUser = data.find((user) => user._id === parsedUser._id);
+        if(!foundUser){
           //if user not found this code will trigger the catch
           throw new Error("Unable to find user") 
         }
-        const favMovies = movies.filter(mv => userData.FavoriteMovies.includes(mv.id))
+        const favMovies = movies.filter(mv => foundUser.FavoriteMovies.includes(mv.id))
         setFavoriteMovies(favMovies)
-        setUserData(userData);
+        setUserData({...foundUser, Password: ""});
+        setUser({...foundUser, Password: ""});
         setIsLoading(false);
       })
       .catch((error) => {
@@ -46,44 +52,54 @@ export const ProfileView = ({movies}) => {
       });
   }, []);
 
+
+  const handleUpdateUser = (e) => {
+    e.preventDefault()
   // handles updating user data
   // /users/:Username is my API endpoint to update user data, PUT method
 
   // keep getting fetch error from line 72, won't load profileView at all; alert message is stuck and won't allow clicking elsewhere
   // is this because I'm trying to fetch the exact same endpoint (using different method)???
 
-  //   try {
-  //     fetch(`https://my---movies-868565568c2a.herokuapp.com/users/${user}`, {
-  //       method: "PUT",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //         Authorization: `Bearer ${localStorage.getItem("token")}`,
-  //       },
-  //       body: JSON.stringify(updatedUserData),
-  //     })
-  //       .then((response) => response.json())
-  //       .then((data) => {
-  //         const updatedUserData = {
-  //           Username: e.target.elements.Username.value,
-  //           Birthday: e.target.elements.Birthday.value,
-  //           Email: e.target.elements.Email.value,
-  //           Password: e.target.elements.Password.value,
-  //         };
-
-  //         setUserData(updatedUserData);
-  //         setIsEditing(false);
-  //         alert("Your profile has been successfully updated.");
-  //       })
-  //       .catch((error) => {
-  //         console.error("Error updating user data:", error);
-  //         alert("Error updating user profile; please try again later.");
-  //         setIsLoading(false);
-  //       });
-  //   } catch (error) {
-  //     console.error("Fetch error:", error);
-  //     alert("Error with the fetch request; please try again later.");
-  //     setIsLoading(false);
-  //   }
+  console.log(userData)
+    let updatedUserData = {
+      Username: userData.Username,
+      Birthday: userData.Birthday,
+      Email: userData.Email,
+    }
+//ensures empty string isnt sent back
+    if(userData.Password.trim().length !== 0){
+      updatedUserData.Password = userData.Password
+    }
+  
+      fetch(`https://my---movies-868565568c2a.herokuapp.com/users/${user.Username}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+        body: JSON.stringify(updatedUserData),
+      })
+        .then((response) => {
+          if (response.status >= 200 && response.status < 300) {
+            return response.json()
+          }
+          throw new Error(response.errors)
+        })
+        .then((data) => {
+          console.log("data", data)
+          setUserData({...data, Password: ""});
+          setUser({...data, Password: ""});
+          localStorage.setItem("user", JSON.stringify(data))
+          setIsEditing(false);
+          alert("Your profile has been successfully updated.");
+        })
+        .catch((error) => {
+          console.error("Error updating user data:", error);
+          alert("Error updating user profile; please try again later.");
+          setIsLoading(false);
+        });
+  }
 
   // deletes users
   // /users/:Username is my API endpoint to delete users, DELETE method
@@ -93,7 +109,7 @@ export const ProfileView = ({movies}) => {
   const handleDeleteUser = async () => {
     try {
       const response = await fetch(
-        `https://my---movies-868565568c2a.herokuapp.com/users/${user}`,
+        `https://my---movies-868565568c2a.herokuapp.com/users/${user.Username}`,
         {
           method: "DELETE",
           headers: {
@@ -105,7 +121,7 @@ export const ProfileView = ({movies}) => {
       if (response.ok) {
         setUserData(null);
         setIsEditing(false);
-
+        localStorage.clear()
         alert("User has been successfully deregistered.");
       } else {
         console.error("Error deregistering user:", error);
@@ -117,6 +133,9 @@ export const ProfileView = ({movies}) => {
     }
   };
 
+  const handleChange = (e) => {
+    setUserData(prevState => ({...prevState, [e.target.name] : e.target.value}))
+  }
   // renders profile view with user data and favorite movies, option to update user data
   return (
     <div>
@@ -129,13 +148,14 @@ export const ProfileView = ({movies}) => {
             <Form.Control
               type="text"
               name="Username"
-              defaultValue={userData ? userData.Username : ""}
+              defaultValue={userData.Username}
+              onChange={handleChange}
             />
           ) : (
             <Form.Control
               type="text"
               name="Username"
-              value={userData ? userData.Username : ""}
+              value={userData.Username}
               readOnly
             />
           )}
@@ -147,13 +167,14 @@ export const ProfileView = ({movies}) => {
             <Form.Control
               type="date"
               name="Birthday"
-              defaultValue={userData ? userData.Birthday : ""}
+              defaultValue={userData.Birthday}
+              onChange={handleChange}
             />
           ) : (
             <Form.Control
               type="date"
               name="Birthday"
-              value={userData ? userData.Birthday : ""}
+              value={userData.Birthday}
               readOnly
             />
           )}
@@ -165,13 +186,14 @@ export const ProfileView = ({movies}) => {
             <Form.Control
               type="email"
               name="Email"
-              defaultValue={userData ? userData.Email : ""}
+              defaultValue={userData.Email}
+              onChange={handleChange}
             />
           ) : (
             <Form.Control
               type="email"
               name="Email"
-              value={userData ? userData.Email : ""}
+              value={userData.Email}
               readOnly
             />
           )}
@@ -183,7 +205,8 @@ export const ProfileView = ({movies}) => {
             <Form.Control
               type="password"
               name="Password"
-              defaultValue={userData ? userData.Password : ""}
+              defaultValue={userData.Password}
+              onChange={handleChange}
             />
           ) : (
             <Form.Control
@@ -200,10 +223,7 @@ export const ProfileView = ({movies}) => {
             <Button
               className="m-3"
               variant="outline-primary"
-              type="submit"
-              onClick={() => {
-                handleUpdateUser();
-              }}
+              onClick={handleUpdateUser}
             >
               Update
             </Button>
