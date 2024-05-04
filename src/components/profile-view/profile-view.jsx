@@ -3,7 +3,7 @@ import { MovieCard } from "../movie-card";
 import { Spinner, Form, Button, Row, Col } from "react-bootstrap";
 
 // profileView component: user profile, updated profile, and favorite movies
-export const ProfileView = () => {
+export const ProfileView = ({movies}) => {
   // state variables
   const [user, setUser] = useState([]);
   const [token, setToken] = useState();
@@ -21,18 +21,21 @@ export const ProfileView = () => {
 
   useEffect(() => {
     setIsLoading(true);
-    fetch(`https://my---movies-868565568c2a.herokuapp.com/users/${user}`, {
+    const userFromStorage = localStorage.getItem("user")
+    const parsedUser = JSON.parse(userFromStorage)
+    fetch(`https://my---movies-868565568c2a.herokuapp.com/users`, {
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
     })
       .then((response) => response.json())
       // extracts needed info from json
       .then((data) => {
-        const userData = data.find((user) => ({
-          Username: user.Username,
-          Birthday: user.Birthday,
-          Email: user.Email,
-          Password: "***h*a*s*h*e*d***",
-        }));
+        const userData = data.find((user) => user._id === parsedUser._id);
+        if(!userData){
+          //if user not found this code will trigger the catch
+          throw new Error("Unable to find user") 
+        }
+        const favMovies = movies.filter(mv => userData.FavoriteMovies.includes(mv.id))
+        setFavoriteMovies(favMovies)
         setUserData(userData);
         setIsLoading(false);
       })
@@ -113,32 +116,6 @@ export const ProfileView = () => {
       alert("Error deleting your account; please try again later.");
     }
   };
-
-  // fetches favorite movies, copied logic from mainView
-  // users/movies/:MovieID is my API endpoint to POST movies to favoriteMovies array, unsure how to GET array
-
-  // currently doesn't display favoriteMovies, though does display correct error message to user
-
-  useEffect(() => {
-    fetch(
-      `https://my---movies-868565568c2a.herokuapp.com/users/movies/:MovieID/${user.FavoriteMovies}`,
-      {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-      }
-    )
-      .then((response) => response.json())
-      .then((data) => {
-        // extracts needed info from json
-        const favoriteMoviesFromApi = data.map((user) => ({
-          FavoriteMovie: user.FavoriteMovies,
-        }));
-        setFavoriteMovies(favoriteMoviesFromApi);
-      })
-      .catch((error) => {
-        console.error("Error fetching favorite movies:", error);
-        alert("Error fetching favorite movies; please try again later.");
-      });
-  }, []);
 
   // renders profile view with user data and favorite movies, option to update user data
   return (
@@ -269,8 +246,8 @@ export const ProfileView = () => {
         ) : (
           <Row>
             {favoriteMovies.length > 0 ? (
-              movies.map((favoriteMovie) => (
-                <Col className="mt-3 mb-3" key={[user.FavoriteMovies]} md={3}>
+              favoriteMovies.map((favoriteMovie) => (
+                <Col className="mt-3 mb-3" key={favoriteMovie.id} md={3}>
                   <MovieCard movie={favoriteMovie} />
                 </Col>
               ))
