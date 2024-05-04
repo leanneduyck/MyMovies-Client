@@ -1,10 +1,17 @@
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
+import { useNavigate, useParams } from "react-router";
 
-export const MovieView = ({ movie, onBackClick }) => {
+export const MovieView = ({ movies }) => {
+  const { movieId } = useParams(); //get param from url, so movieId is /movie/:movieId check main-view.jsx
+  const navigate = useNavigate();
+  const movie = movies.find((movie) => movie.id === movieId);
+
+  //check if movie is undefined!
+  if (!movie) {
+    return <div>movie not found! </div>;
+  }
   return (
-    <Row className="justify-content-md-center m-5">
+    <div className="justify-content-md-center m-5">
       <div>
         <img className="w-100" src={movie.image} />
       </div>
@@ -44,9 +51,9 @@ export const MovieView = ({ movie, onBackClick }) => {
         <span>Director's Bio: </span>
         <span>{movie.directorBio}</span>
       </div>
-      <Button className="m-3" variant="primary" onClick={onBackClick}>
+      <Button className="m-3" variant="primary" onClick={() => navigate("/")}>
         Back to Home Page
       </Button>
-    </Row>
+    </div>
   );
 };

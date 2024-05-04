@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
-import Button from "react-bootstrap/Button";
-import Form from "react-bootstrap/Form";
+import { Button, Form } from "react-bootstrap";
+import { useNavigate } from "react-router";
 
-export const LoginView = ({ onLoggedIn }) => {
+export const LoginView = ({ onLoggedIn, isAuth }) => {
+  const navigate = useNavigate();
   // useState for username and pw
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -42,6 +43,14 @@ export const LoginView = ({ onLoggedIn }) => {
         alert("Something went wrong.");
       });
   };
+
+  useEffect(() => {
+    //when user is loggedIn and isAuth is true switch user to home route
+    if (isAuth) {
+      return navigate("/");
+    }
+  }, [isAuth]);
+
   return (
     // callback telling API to validate username and pw
     <Form onSubmit={handleSubmit}>

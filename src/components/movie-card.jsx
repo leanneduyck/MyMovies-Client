@@ -1,14 +1,18 @@
 import PropTypes from "prop-types";
 import { Button, Card } from "react-bootstrap";
+import { useNavigate } from "react-router";
 
 // component displays MovieCard when called, uses react-bootstrap``
-export const MovieCard = ({ movie, onMovieClick }) => {
+export const MovieCard = ({ movie }) => {
+  const navigate = useNavigate();
   return (
     // onClick on Card element makes entire card clickable instead of button
     <Card
       className="h-100"
       style={{ cursor: "pointer" }}
-      onClick={() => onMovieClick(movie)}
+      onClick={() => {
+        navigate(`/movie/${movie.id}`); // we change the url when the user clicks the movie
+      }}
     >
       <Card.Img variant="top" src={movie.image} />
       <Card.Body>
@@ -33,5 +37,5 @@ MovieCard.propTypes = {
     directorBirthYear: PropTypes.string,
     directorBio: PropTypes.string,
   }).isRequired,
-  onMovieClick: PropTypes.func.isRequired,
+  // onMovieClick: PropTypes.func.isRequired, you dont need this anymore
 };
