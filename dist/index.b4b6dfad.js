@@ -28413,8 +28413,7 @@ const MainView = ()=>{
                                     }, void 0) : /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _colDefault.default), {
                                         md: 5,
                                         children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _profileViewJsx.ProfileView), {
-                                            user: user,
-                                            token: token
+                                            user: user
                                         }, void 0, false, {
                                             fileName: "src/components/main-view/main-view.jsx",
                                             lineNumber: 146,
@@ -42494,41 +42493,91 @@ var _s = $RefreshSig$();
 const ProfileView = ()=>{
     _s();
     // state variables
-    const [user, setUser] = (0, _react.useState)([]);
+    const [user, setUser] = (0, _react.useState)({});
     const [token, setToken] = (0, _react.useState)();
     const [favoriteMovies, setFavoriteMovies] = (0, _react.useState)([]);
-    const [userData, setUserData] = (0, _react.useState)(null);
+    const [userData, setUserData] = (0, _react.useState)({
+        Username: "",
+        Email: "",
+        Password: "",
+        Birthday: ""
+    });
     const [isEditing, setIsEditing] = (0, _react.useState)(false);
     const [isLoading, setIsLoading] = (0, _react.useState)(true);
     // fetches authorized user data from API, sets userData, copied logic from mainView
     // /users returns all users in my API...not sure how to get just the logged-in user...???
     // currently returns FIRST USER from database, regardless of who is logged in
     // also doesn't display birthday, only username and email and *** for pw
-    // I get an error saying that the bday doesn't conform to yyyy/mm/dd format, but my database is mm/dd/yyyy
     (0, _react.useEffect)(()=>{
         setIsLoading(true);
-        fetch(`https://my---movies-868565568c2a.herokuapp.com/users/${user}`, {
+        fetch(`https://my---movies-868565568c2a.herokuapp.com/users/${user.Username}`, {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem("token")}`
             }
         }).then((response)=>response.json())// extracts needed info from json
         .then((data)=>{
-            const userData = data.find((user)=>({
-                    Username: user.Username,
-                    Birthday: user.Birthday,
-                    Email: user.Email,
-                    Password: "***h*a*s*h*e*d***"
-                }));
-            setUserData(userData);
+            const foundUser = data.find((user)=>user._id === parsedUser._id);
+            if (!foundUser) throw new Error("User not found");
+            const favMovies = movies.filter((mv)=>foundUser.FavoriteMovies.includes(mv._id));
+            setFavoriteMovies(favMovies);
+            setUserData({
+                ...foundUser,
+                Password: ""
+            });
+            setUser({
+                ...foundUser,
+                Password: ""
+            });
             setIsLoading(false);
         }).catch((error1)=>{
             console.error("Error fetching user data:", error1);
             alert("Error fetching user data; please try again later.");
             setIsLoading(false);
         });
-    }, []);
+    }, [
+        user
+    ]);
     // handles updating user data
     // /users/:Username is my API endpoint to update user data, PUT method
+    const handleUpdateUser = (e)=>{
+        e.preventDefault();
+        console.log(userData);
+        let updatedUserData = {
+            Username: userData.Username,
+            Birthday: userData.Birthday,
+            Email: userData.Email
+        };
+        //ensures empty string isnt sent back
+        if (userData.Password.trim().length !== 0) updatedUserData.Password = userData.Password;
+        fetch(`https://my---movies-868565568c2a.herokuapp.com/users/${user.Username}`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${localStorage.getItem("token")}`
+            },
+            body: JSON.stringify(updatedUserData)
+        }).then((response)=>{
+            if (response.status >= 200 && response.status < 300) return response.json();
+            throw new Error(response.errors);
+        }).then((data)=>{
+            console.log("data", data);
+            setUserData({
+                ...data,
+                Password: ""
+            });
+            setUser({
+                ...data,
+                Password: ""
+            });
+            localStorage.setItem("user", JSON.stringify(data));
+            setIsEditing(false);
+            alert("Your profile has been successfully updated.");
+        }).catch((error1)=>{
+            console.error("Error updating user data:", error1);
+            alert("Error updating user profile; please try again later.");
+            setIsLoading(false);
+        });
+    };
     // keep getting fetch error from line 72, won't load profileView at all; alert message is stuck and won't allow clicking elsewhere
     // is this because I'm trying to fetch the exact same endpoint (using different method)???
     //   try {
@@ -42567,7 +42616,7 @@ const ProfileView = ()=>{
     // currently doesn't delete user from database, do receive correct error message as user
     const handleDeleteUser = async ()=>{
         try {
-            const response = await fetch(`https://my---movies-868565568c2a.herokuapp.com/users/${user}`, {
+            const response = await fetch(`https://my---movies-868565568c2a.herokuapp.com/users/${user.Username}`, {
                 method: "DELETE",
                 headers: {
                     "Content-Type": "application/json",
@@ -42577,6 +42626,7 @@ const ProfileView = ()=>{
             if (response.ok) {
                 setUserData(null);
                 setIsEditing(false);
+                localStorage.clear();
                 alert("User has been successfully deregistered.");
             } else {
                 console.error("Error deregistering user:", error);
@@ -42606,6 +42656,12 @@ const ProfileView = ()=>{
             alert("Error fetching favorite movies; please try again later.");
         });
     }, []);
+    const handleChange = (e)=>{
+        setUserData((prevState)=>({
+                ...prevState,
+                [e.target.name]: e.target.value
+            }));
+    };
     // renders profile view with user data and favorite movies, option to update user data
     return /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
         children: [
@@ -42613,7 +42669,7 @@ const ProfileView = ()=>{
                 children: "Profile:"
             }, void 0, false, {
                 fileName: "src/components/profile-view/profile-view.jsx",
-                lineNumber: 146,
+                lineNumber: 210,
                 columnNumber: 7
             }, undefined),
             /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactBootstrap.Form), {
@@ -42625,31 +42681,32 @@ const ProfileView = ()=>{
                                 children: "Username:"
                             }, void 0, false, {
                                 fileName: "src/components/profile-view/profile-view.jsx",
-                                lineNumber: 150,
+                                lineNumber: 214,
                                 columnNumber: 11
                             }, undefined),
                             isEditing ? /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactBootstrap.Form).Control, {
                                 type: "text",
                                 name: "Username",
-                                defaultValue: userData ? userData.Username : ""
+                                defaultValue: userData.Username,
+                                onChange: handleChange
                             }, void 0, false, {
                                 fileName: "src/components/profile-view/profile-view.jsx",
-                                lineNumber: 152,
+                                lineNumber: 216,
                                 columnNumber: 13
                             }, undefined) : /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactBootstrap.Form).Control, {
                                 type: "text",
                                 name: "Username",
-                                value: userData ? userData.Username : "",
+                                value: userData.Username,
                                 readOnly: true
                             }, void 0, false, {
                                 fileName: "src/components/profile-view/profile-view.jsx",
-                                lineNumber: 158,
+                                lineNumber: 223,
                                 columnNumber: 13
                             }, undefined)
                         ]
                     }, void 0, true, {
                         fileName: "src/components/profile-view/profile-view.jsx",
-                        lineNumber: 149,
+                        lineNumber: 213,
                         columnNumber: 9
                     }, undefined),
                     /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactBootstrap.Form).Group, {
@@ -42659,31 +42716,32 @@ const ProfileView = ()=>{
                                 children: "Birthday:"
                             }, void 0, false, {
                                 fileName: "src/components/profile-view/profile-view.jsx",
-                                lineNumber: 168,
+                                lineNumber: 233,
                                 columnNumber: 11
                             }, undefined),
                             isEditing ? /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactBootstrap.Form).Control, {
                                 type: "date",
                                 name: "Birthday",
-                                defaultValue: userData ? userData.Birthday : ""
+                                defaultValue: userData.Birthday,
+                                onChange: handleChange
                             }, void 0, false, {
                                 fileName: "src/components/profile-view/profile-view.jsx",
-                                lineNumber: 170,
+                                lineNumber: 235,
                                 columnNumber: 13
                             }, undefined) : /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactBootstrap.Form).Control, {
                                 type: "date",
                                 name: "Birthday",
-                                value: userData ? userData.Birthday : "",
+                                value: userData.Birthday,
                                 readOnly: true
                             }, void 0, false, {
                                 fileName: "src/components/profile-view/profile-view.jsx",
-                                lineNumber: 176,
+                                lineNumber: 242,
                                 columnNumber: 13
                             }, undefined)
                         ]
                     }, void 0, true, {
                         fileName: "src/components/profile-view/profile-view.jsx",
-                        lineNumber: 167,
+                        lineNumber: 232,
                         columnNumber: 9
                     }, undefined),
                     /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactBootstrap.Form).Group, {
@@ -42693,31 +42751,32 @@ const ProfileView = ()=>{
                                 children: "Email:"
                             }, void 0, false, {
                                 fileName: "src/components/profile-view/profile-view.jsx",
-                                lineNumber: 186,
+                                lineNumber: 252,
                                 columnNumber: 11
                             }, undefined),
                             isEditing ? /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactBootstrap.Form).Control, {
                                 type: "email",
                                 name: "Email",
-                                defaultValue: userData ? userData.Email : ""
+                                defaultValue: userData.Email,
+                                onChange: handleChange
                             }, void 0, false, {
                                 fileName: "src/components/profile-view/profile-view.jsx",
-                                lineNumber: 188,
+                                lineNumber: 254,
                                 columnNumber: 13
                             }, undefined) : /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactBootstrap.Form).Control, {
                                 type: "email",
                                 name: "Email",
-                                value: userData ? userData.Email : "",
+                                value: userData.Email,
                                 readOnly: true
                             }, void 0, false, {
                                 fileName: "src/components/profile-view/profile-view.jsx",
-                                lineNumber: 194,
+                                lineNumber: 261,
                                 columnNumber: 13
                             }, undefined)
                         ]
                     }, void 0, true, {
                         fileName: "src/components/profile-view/profile-view.jsx",
-                        lineNumber: 185,
+                        lineNumber: 251,
                         columnNumber: 9
                     }, undefined),
                     /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactBootstrap.Form).Group, {
@@ -42727,16 +42786,17 @@ const ProfileView = ()=>{
                                 children: "Password:"
                             }, void 0, false, {
                                 fileName: "src/components/profile-view/profile-view.jsx",
-                                lineNumber: 204,
+                                lineNumber: 271,
                                 columnNumber: 11
                             }, undefined),
                             isEditing ? /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactBootstrap.Form).Control, {
                                 type: "password",
                                 name: "Password",
-                                defaultValue: userData ? userData.Password : ""
+                                defaultValue: userData.Password,
+                                onChange: handleChange
                             }, void 0, false, {
                                 fileName: "src/components/profile-view/profile-view.jsx",
-                                lineNumber: 206,
+                                lineNumber: 273,
                                 columnNumber: 13
                             }, undefined) : /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactBootstrap.Form).Control, {
                                 type: "password",
@@ -42745,13 +42805,13 @@ const ProfileView = ()=>{
                                 readOnly: !isEditing
                             }, void 0, false, {
                                 fileName: "src/components/profile-view/profile-view.jsx",
-                                lineNumber: 212,
+                                lineNumber: 280,
                                 columnNumber: 13
                             }, undefined)
                         ]
                     }, void 0, true, {
                         fileName: "src/components/profile-view/profile-view.jsx",
-                        lineNumber: 203,
+                        lineNumber: 270,
                         columnNumber: 9
                     }, undefined),
                     isEditing ? /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _jsxDevRuntime.Fragment), {
@@ -42760,13 +42820,11 @@ const ProfileView = ()=>{
                                 className: "m-3",
                                 variant: "outline-primary",
                                 type: "submit",
-                                onClick: ()=>{
-                                    handleUpdateUser();
-                                },
+                                onClick: handleUpdateUser,
                                 children: "Update"
                             }, void 0, false, {
                                 fileName: "src/components/profile-view/profile-view.jsx",
-                                lineNumber: 223,
+                                lineNumber: 291,
                                 columnNumber: 13
                             }, undefined),
                             /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactBootstrap.Button), {
@@ -42776,7 +42834,7 @@ const ProfileView = ()=>{
                                 children: "Cancel"
                             }, void 0, false, {
                                 fileName: "src/components/profile-view/profile-view.jsx",
-                                lineNumber: 233,
+                                lineNumber: 299,
                                 columnNumber: 13
                             }, undefined),
                             /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactBootstrap.Button), {
@@ -42791,7 +42849,7 @@ const ProfileView = ()=>{
                                 children: "Delete Account"
                             }, void 0, false, {
                                 fileName: "src/components/profile-view/profile-view.jsx",
-                                lineNumber: 240,
+                                lineNumber: 306,
                                 columnNumber: 13
                             }, undefined)
                         ]
@@ -42802,29 +42860,22 @@ const ProfileView = ()=>{
                         children: "Edit"
                     }, void 0, false, {
                         fileName: "src/components/profile-view/profile-view.jsx",
-                        lineNumber: 254,
+                        lineNumber: 320,
                         columnNumber: 11
                     }, undefined)
                 ]
             }, void 0, true, {
                 fileName: "src/components/profile-view/profile-view.jsx",
-                lineNumber: 148,
-                columnNumber: 7
-            }, undefined),
-            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("h1", {
-                children: "Favorite Movies:"
-            }, void 0, false, {
-                fileName: "src/components/profile-view/profile-view.jsx",
-                lineNumber: 264,
+                lineNumber: 212,
                 columnNumber: 7
             }, undefined),
             /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
                 children: [
                     /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("h1", {
-                        children: "My Favorite Movies:"
+                        children: "Favorite Movies:"
                     }, void 0, false, {
                         fileName: "src/components/profile-view/profile-view.jsx",
-                        lineNumber: 266,
+                        lineNumber: 331,
                         columnNumber: 9
                     }, undefined),
                     isLoading ? /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactBootstrap.Spinner), {
@@ -42832,7 +42883,7 @@ const ProfileView = ()=>{
                         variant: "primary"
                     }, void 0, false, {
                         fileName: "src/components/profile-view/profile-view.jsx",
-                        lineNumber: 268,
+                        lineNumber: 333,
                         columnNumber: 11
                     }, undefined) : /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactBootstrap.Row), {
                         children: favoriteMovies.length > 0 ? movies.map((favoriteMovie)=>/*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactBootstrap.Col), {
@@ -42842,41 +42893,41 @@ const ProfileView = ()=>{
                                     movie: favoriteMovie
                                 }, void 0, false, {
                                     fileName: "src/components/profile-view/profile-view.jsx",
-                                    lineNumber: 274,
+                                    lineNumber: 339,
                                     columnNumber: 19
                                 }, undefined)
                             }, [
                                 user.FavoriteMovies
                             ], false, {
                                 fileName: "src/components/profile-view/profile-view.jsx",
-                                lineNumber: 273,
+                                lineNumber: 338,
                                 columnNumber: 17
                             }, undefined)) : /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactBootstrap.Col), {
                             children: "You have not chosen any favorite movies yet!"
                         }, void 0, false, {
                             fileName: "src/components/profile-view/profile-view.jsx",
-                            lineNumber: 278,
+                            lineNumber: 343,
                             columnNumber: 15
                         }, undefined)
                     }, void 0, false, {
                         fileName: "src/components/profile-view/profile-view.jsx",
-                        lineNumber: 270,
+                        lineNumber: 335,
                         columnNumber: 11
                     }, undefined)
                 ]
             }, void 0, true, {
                 fileName: "src/components/profile-view/profile-view.jsx",
-                lineNumber: 265,
+                lineNumber: 330,
                 columnNumber: 7
             }, undefined)
         ]
     }, void 0, true, {
         fileName: "src/components/profile-view/profile-view.jsx",
-        lineNumber: 145,
+        lineNumber: 209,
         columnNumber: 5
     }, undefined);
 };
-_s(ProfileView, "OTxdas0TIWfIoiGyv7UzXc5z2g0=");
+_s(ProfileView, "SRavqH/CsOKimWH/DzGuYZ4uS9k=");
 _c = ProfileView;
 var _c;
 $RefreshReg$(_c, "ProfileView");

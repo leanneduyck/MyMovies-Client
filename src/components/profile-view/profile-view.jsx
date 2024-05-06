@@ -5,10 +5,15 @@ import { Spinner, Form, Button, Row, Col } from "react-bootstrap";
 // profileView component: user profile, updated profile, and favorite movies
 export const ProfileView = () => {
   // state variables
-  const [user, setUser] = useState([]);
+  const [user, setUser] = useState({});
   const [token, setToken] = useState();
   const [favoriteMovies, setFavoriteMovies] = useState([]);
-  const [userData, setUserData] = useState(null);
+  const [userData, setUserData] = useState({
+    Username: "",
+    Email: "",
+    Password: "",
+    Birthday: "",
+  });
   const [isEditing, setIsEditing] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -17,34 +22,85 @@ export const ProfileView = () => {
   // /users returns all users in my API...not sure how to get just the logged-in user...???
   // currently returns FIRST USER from database, regardless of who is logged in
   // also doesn't display birthday, only username and email and *** for pw
-  // I get an error saying that the bday doesn't conform to yyyy/mm/dd format, but my database is mm/dd/yyyy
 
   useEffect(() => {
     setIsLoading(true);
-    fetch(`https://my---movies-868565568c2a.herokuapp.com/users/${user}`, {
-      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-    })
+    fetch(
+      `https://my---movies-868565568c2a.herokuapp.com/users/${user.Username}`,
+      {
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      }
+    )
       .then((response) => response.json())
       // extracts needed info from json
       .then((data) => {
-        const userData = data.find((user) => ({
-          Username: user.Username,
-          Birthday: user.Birthday,
-          Email: user.Email,
-          Password: "***h*a*s*h*e*d***",
-        }));
-        setUserData(userData);
+        const foundUser = data.find((user) => user._id === parsedUser._id);
+        if (!foundUser) {
+          throw new Error("User not found");
+        }
+        const favMovies = movies.filter((mv) =>
+          foundUser.FavoriteMovies.includes(mv._id)
+        );
+        setFavoriteMovies(favMovies);
+        setUserData({ ...foundUser, Password: "" });
+        setUser({ ...foundUser, Password: "" });
         setIsLoading(false);
       })
+
       .catch((error) => {
         console.error("Error fetching user data:", error);
         alert("Error fetching user data; please try again later.");
         setIsLoading(false);
       });
-  }, []);
+  }, [user]);
 
   // handles updating user data
   // /users/:Username is my API endpoint to update user data, PUT method
+
+  const handleUpdateUser = (e) => {
+    e.preventDefault();
+    console.log(userData);
+    let updatedUserData = {
+      Username: userData.Username,
+      Birthday: userData.Birthday,
+      Email: userData.Email,
+    };
+    //ensures empty string isnt sent back
+    if (userData.Password.trim().length !== 0) {
+      updatedUserData.Password = userData.Password;
+    }
+
+    fetch(
+      `https://my---movies-868565568c2a.herokuapp.com/users/${user.Username}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+        body: JSON.stringify(updatedUserData),
+      }
+    )
+      .then((response) => {
+        if (response.status >= 200 && response.status < 300) {
+          return response.json();
+        }
+        throw new Error(response.errors);
+      })
+      .then((data) => {
+        console.log("data", data);
+        setUserData({ ...data, Password: "" });
+        setUser({ ...data, Password: "" });
+        localStorage.setItem("user", JSON.stringify(data));
+        setIsEditing(false);
+        alert("Your profile has been successfully updated.");
+      })
+      .catch((error) => {
+        console.error("Error updating user data:", error);
+        alert("Error updating user profile; please try again later.");
+        setIsLoading(false);
+      });
+  };
 
   // keep getting fetch error from line 72, won't load profileView at all; alert message is stuck and won't allow clicking elsewhere
   // is this because I'm trying to fetch the exact same endpoint (using different method)???
@@ -90,7 +146,7 @@ export const ProfileView = () => {
   const handleDeleteUser = async () => {
     try {
       const response = await fetch(
-        `https://my---movies-868565568c2a.herokuapp.com/users/${user}`,
+        `https://my---movies-868565568c2a.herokuapp.com/users/${user.Username}`,
         {
           method: "DELETE",
           headers: {
@@ -102,6 +158,7 @@ export const ProfileView = () => {
       if (response.ok) {
         setUserData(null);
         setIsEditing(false);
+        localStorage.clear();
 
         alert("User has been successfully deregistered.");
       } else {
@@ -140,6 +197,13 @@ export const ProfileView = () => {
       });
   }, []);
 
+  const handleChange = (e) => {
+    setUserData((prevState) => ({
+      ...prevState,
+      [e.target.name]: e.target.value,
+    }));
+  };
+
   // renders profile view with user data and favorite movies, option to update user data
   return (
     <div>
@@ -152,13 +216,14 @@ export const ProfileView = () => {
             <Form.Control
               type="text"
               name="Username"
-              defaultValue={userData ? userData.Username : ""}
+              defaultValue={userData.Username}
+              onChange={handleChange}
             />
           ) : (
             <Form.Control
               type="text"
               name="Username"
-              value={userData ? userData.Username : ""}
+              value={userData.Username}
               readOnly
             />
           )}
@@ -170,13 +235,14 @@ export const ProfileView = () => {
             <Form.Control
               type="date"
               name="Birthday"
-              defaultValue={userData ? userData.Birthday : ""}
+              defaultValue={userData.Birthday}
+              onChange={handleChange}
             />
           ) : (
             <Form.Control
               type="date"
               name="Birthday"
-              value={userData ? userData.Birthday : ""}
+              value={userData.Birthday}
               readOnly
             />
           )}
@@ -188,13 +254,14 @@ export const ProfileView = () => {
             <Form.Control
               type="email"
               name="Email"
-              defaultValue={userData ? userData.Email : ""}
+              defaultValue={userData.Email}
+              onChange={handleChange}
             />
           ) : (
             <Form.Control
               type="email"
               name="Email"
-              value={userData ? userData.Email : ""}
+              value={userData.Email}
               readOnly
             />
           )}
@@ -206,7 +273,8 @@ export const ProfileView = () => {
             <Form.Control
               type="password"
               name="Password"
-              defaultValue={userData ? userData.Password : ""}
+              defaultValue={userData.Password}
+              onChange={handleChange}
             />
           ) : (
             <Form.Control
@@ -224,9 +292,7 @@ export const ProfileView = () => {
               className="m-3"
               variant="outline-primary"
               type="submit"
-              onClick={() => {
-                handleUpdateUser();
-              }}
+              onClick={handleUpdateUser}
             >
               Update
             </Button>
@@ -261,9 +327,8 @@ export const ProfileView = () => {
         )}
       </Form>
 
-      <h1>Favorite Movies:</h1>
       <div>
-        <h1>My Favorite Movies:</h1>
+        <h1>Favorite Movies:</h1>
         {isLoading ? (
           <Spinner animation="border" variant="primary" />
         ) : (

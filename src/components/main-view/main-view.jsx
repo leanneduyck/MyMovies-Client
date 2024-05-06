@@ -143,7 +143,7 @@ export const MainView = () => {
                   <Navigate to="/users" replace />
                 ) : (
                   <Col md={5}>
-                    <ProfileView user={user} token={token} />
+                    <ProfileView user={user} />
                   </Col>
                 )}
               </>
