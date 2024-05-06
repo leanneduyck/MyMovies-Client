@@ -42520,7 +42520,7 @@ const ProfileView = ({ movies })=>{
         }).then((response)=>response.json())// extracts needed info from json
         .then((data)=>{
             const foundUser = data.find((user)=>user._id === parsedUser._id);
-            if (!foundUser) //if user not found this code will trigger the catch
+            if (!foundUser) //if user not found, will trigger the catch
             throw new Error("Unable to find user");
             const favMovies = movies.filter((mv)=>foundUser.FavoriteMovies.includes(mv._id));
             setFavoriteMovies(favMovies);

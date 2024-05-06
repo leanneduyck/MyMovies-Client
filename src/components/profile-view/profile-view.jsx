@@ -36,7 +36,7 @@ export const ProfileView = ({ movies }) => {
       .then((data) => {
         const foundUser = data.find((user) => user._id === parsedUser._id);
         if (!foundUser) {
-          //if user not found this code will trigger the catch
+          //if user not found, will trigger the catch
           throw new Error("Unable to find user");
         }
         const favMovies = movies.filter((mv) =>
