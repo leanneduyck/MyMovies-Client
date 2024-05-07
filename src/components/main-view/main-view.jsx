@@ -1,5 +1,12 @@
 // imports other views, imports react states
 import React, { useState, useEffect } from "react";
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  Navigate,
+  useParams,
+} from "react-router-dom";
 import { MovieCard } from "../movie-card.jsx";
 import { MovieView } from "../movie-view/movie-view.jsx";
 import { LoginView } from "../login-view/login-view.jsx";
@@ -9,7 +16,6 @@ import { ProfileView } from "../profile-view/profile-view.jsx";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Spinner from "react-bootstrap/Spinner";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
 // exports array to other views, empty array will pull from API, uses localStorage as default values for user/token states
 export const MainView = () => {
@@ -18,6 +24,7 @@ export const MainView = () => {
   const [token, setToken] = useState(null);
   const [movies, setMovies] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState("");
 
   //stores and checks users, tokens in localStorage
   useEffect(() => {
@@ -67,6 +74,23 @@ export const MainView = () => {
     // ensures fetch is called every time token changes
   }, [token]);
 
+  // currently, search bar is working as expected EXCEPT for navigation to MovieView, only shows movie in console.log
+
+  // function to handle search and submit
+  const SearchResults = () => {
+    const searchQuery = useParams().searchQuery;
+    const foundMovie = movies.find(
+      (movie) => movie.title.toLowerCase() === searchQuery.toLowerCase()
+    );
+    // if movie is found, navigates to movieView
+    return foundMovie ? (
+      <MovieView movie={foundMovie} />
+    ) : (
+      // if movie not found, navigates to home page
+      <Navigate to="/" replace state={{ from: `/search/${searchQuery}` }} />
+    );
+  };
+
   // implements state-based routing
   // passes full array of movies to MovieView
   // each <Route> has path to matching URL, plus element telling what to render
@@ -83,6 +107,11 @@ export const MainView = () => {
         }}
         setUser={setUser}
         setToken={setToken}
+        movies={movies}
+        searchQuery={searchQuery}
+        setSearchQuery={setSearchQuery}
+        // onSearchAndSubmit={handleSearchAndSubmit}
+        SearchResults={SearchResults}
       />
 
       <Row className="justify-content-md-center">
@@ -120,7 +149,16 @@ export const MainView = () => {
               </>
             }
           />
-
+          <Route
+            path="/movies/:movieId"
+            element={
+              <>
+                <Col md={8}>
+                  <MovieView movies={movies} />
+                </Col>
+              </>
+            }
+          />
           <Route
             path="/movies/:movieId"
             element={
@@ -173,3 +211,5 @@ export const MainView = () => {
     </BrowserRouter>
   );
 };
+
+export default MainView;

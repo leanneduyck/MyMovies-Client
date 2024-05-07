@@ -17,13 +17,8 @@ export const ProfileView = ({ movies }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
-  // fetches authorized user data from API, sets userData, copied logic from mainView
-
-  // /users returns all users in my API...not sure how to get just the logged-in user...???
-  // currently returns FIRST USER from database, regardless of who is logged in
-  // also doesn't display birthday, only username and email and *** for pw
-  // I get an error saying that the bday doesn't conform to yyyy/mm/dd format, but my database is mm/dd/yyyy
-
+  // fetches authorized userData plus favoriteMovies from API and sets userData, copied logic from mainView
+  // currently does display correct user data, but does not display favoriteMovies even when known to be in database
   useEffect(() => {
     setIsLoading(true);
     const userFromStorage = localStorage.getItem("user");
@@ -54,13 +49,11 @@ export const ProfileView = ({ movies }) => {
       });
   }, []);
 
+  // handles updating user data
+  // /users/:Username is my API endpoint to update user data, PUT method
+  // currently doesn't update user data, do receive correct error message as user
   const handleUpdateUser = (e) => {
     e.preventDefault();
-    // handles updating user data
-    // /users/:Username is my API endpoint to update user data, PUT method
-
-    // keep getting fetch error from line 72, won't load profileView at all; alert message is stuck and won't allow clicking elsewhere
-    // is this because I'm trying to fetch the exact same endpoint (using different method)???
 
     console.log(userData);
     let updatedUserData = {
@@ -143,6 +136,7 @@ export const ProfileView = ({ movies }) => {
       [e.target.name]: e.target.value,
     }));
   };
+
   // renders profile view with user data and favorite movies, option to update user data
   return (
     <div>
@@ -265,9 +259,8 @@ export const ProfileView = ({ movies }) => {
         )}
       </Form>
 
-      <h1>Favorite Movies:</h1>
       <div>
-        <h1>My Favorite Movies:</h1>
+        <h1>Favorite Movies:</h1>
         {isLoading ? (
           <Spinner animation="border" variant="primary" />
         ) : (

@@ -3,7 +3,6 @@ import Row from "react-bootstrap/Row";
 import Button from "react-bootstrap/Button";
 import Image from "react-bootstrap/Image";
 import { useParams } from "react-router";
-import { Link } from "react-router-dom";
 
 // state variables
 export const MovieView = ({ movies }) => {
@@ -19,7 +18,7 @@ export const MovieView = ({ movies }) => {
   }
 
   // adds movie to favoriteMovies array
-  // doesn't seem to add movies to array in profileView, though success alert displays
+  // doesn't seem to actually add movies to array in profileView, though success alert displays and movie is added to database
   const addToFavorites = (movie) => {
     if (!favoriteMovies.includes(movie.id)) {
       setFavoriteMovies([...favoriteMovies, movie.id]);
