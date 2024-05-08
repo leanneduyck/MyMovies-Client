@@ -33,9 +33,9 @@ export const MovieView = ({ movies }) => {
   // user.FavoriteMovies is database array of favorite movies
   useEffect(() => {
     fetch(
-      // "https://my---movies-868565568c2a.herokuapp.com/users/:Username/movies/:MovieID",
+      "https://my---movies-868565568c2a.herokuapp.com/users/:Username/movies/:MovieID",
       // "https://my---movies-868565568c2a.herokuapp.com/users/${user.FavoriteMovies}",
-      "https://my---movies-868565568c2a.herokuapp.com/users/${user.Username}/movies/${movieId}",
+      // "https://my---movies-868565568c2a.herokuapp.com/users/${user.Username}/movies/${movieId}",
       // "https://my---movies-868565568c2a.herokuapp.com/users/${user.Username.{user.FavoriteMovies}}/movies/${movieId}",
 
       {

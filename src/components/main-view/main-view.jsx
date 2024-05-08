@@ -76,20 +76,20 @@ export const MainView = () => {
 
   // currently, search bar is working as expected EXCEPT for navigation to MovieView, only shows movie in console.log
 
-  // function to handle search and submit
-  const SearchResults = () => {
-    const searchQuery = useParams().searchQuery;
-    const foundMovie = movies.find(
-      (movie) => movie.title.toLowerCase() === searchQuery.toLowerCase()
-    );
-    // if movie is found, navigates to movieView
-    return foundMovie ? (
-      <MovieView movie={foundMovie} />
-    ) : (
-      // if movie not found, navigates to home page
-      <Navigate to="/" replace state={{ from: `/search/${searchQuery}` }} />
-    );
-  };
+  // // function to handle search and submit
+  // const SearchResults = () => {
+  //   const searchQuery = useParams().searchQuery;
+  //   const foundMovie = movies.find(
+  //     (movie) => movie.title.toLowerCase() === searchQuery.toLowerCase()
+  //   );
+  //   // if movie is found, navigates to movieView
+  //   return foundMovie ? (
+  //     <MovieView movie={foundMovie} />
+  //   ) : (
+  //     // if movie not found, navigates to home page
+  //     <Navigate to="/" replace state={{ from: `/search/${searchQuery}` }} />
+  //   );
+  // };
 
   // implements state-based routing
   // passes full array of movies to MovieView
@@ -110,8 +110,11 @@ export const MainView = () => {
         movies={movies}
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
+        // navigateToMovieView={(movieId) => {
+        //   console.log(movieId);
+        // }}
         // onSearchAndSubmit={handleSearchAndSubmit}
-        SearchResults={SearchResults}
+        // SearchResults={SearchResults}
       />
 
       <Row className="justify-content-md-center">

@@ -1,5 +1,5 @@
-import React from "react";
-import { Navigate, Link } from "react-router-dom";
+import React, { useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
 import {
   Navbar,
   Container,
@@ -8,7 +8,7 @@ import {
   Form,
   FormControl,
 } from "react-bootstrap";
-import { MovieView } from "../movie-view/movie-view";
+import Fuse from "fuse.js";
 
 // state variables
 export const NavigationBar = ({
@@ -17,25 +17,28 @@ export const NavigationBar = ({
   setUser,
   setToken,
   movies,
-  foundMovie,
-  searchQuery,
-  setSearchQuery,
 }) => {
-  // currently, search bar works as expected EXCEPT for navigation to MovieView, only shows movie in console.log
+  const navigate = useNavigate();
+  const [searchInput, setSearchInput] = useState("");
 
-  // handles search form submission
+  // uses Fuse to search movies by title, but not exact title
+  const fuse = new Fuse(movies, {
+    keys: ["title"],
+    // adjusts threshold to control search sensitivity
+    threshold: 0.4,
+  });
+
   const handleSubmit = (event) => {
     event.preventDefault();
-    const foundMovie = movies.find(
-      (movie) => movie.title.toLowerCase() === searchQuery.toLowerCase()
-    );
+    // uses Fuse to search movies by title
+    const searchResults = fuse.search(searchInput);
 
-    // if movie is found, navigates to movieView
-    if (foundMovie) {
-      console.log(foundMovie);
-      <Navigate to={`/movies/${encodeURIComponent(foundMovie.id)}`} />;
-      // clears search field after search
-      setSearchQuery("");
+    if (searchResults.length > 0) {
+      // navigates to movieView of first search result
+      const foundMovie = searchResults[0].item;
+      navigate(`/movies/${encodeURIComponent(foundMovie.id)}`);
+      // clears search input field
+      setSearchInput("");
     } else {
       alert("Sorry, no such movie was found.");
     }
@@ -44,7 +47,7 @@ export const NavigationBar = ({
   // renders Navbar component with search bar
   // if user is logged in, displays Home, Profile, and Logout links
   // if user is not logged in, displays Login and Signup links
-  // search bar allows user to search for movies, displays alert if movie not found
+  // search bar allows user to search for a movie then renders <MovieView />, displays alert if movie not found
   return (
     <Navbar bg="primary" variant="dark" expand="lg" className="m-3" rounded>
       <Container>
@@ -90,17 +93,11 @@ export const NavigationBar = ({
                 type="text"
                 placeholder="Search"
                 className="me-2"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
+                value={searchInput}
+                onChange={(e) => setSearchInput(e.target.value)}
                 id="searchInput"
               />
-              <Button
-                variant="outline-light"
-                type="submit"
-                onClick={handleSubmit}
-                path={`/movies/${encodeURIComponent(foundMovie)}`}
-                element={<MovieView foundMovie={foundMovie} />}
-              >
+              <Button variant="outline-light" type="submit">
                 Search
               </Button>
             </Form>
