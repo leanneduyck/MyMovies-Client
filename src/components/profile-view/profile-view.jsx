@@ -35,7 +35,7 @@ export const ProfileView = ({ movies }) => {
           throw new Error("Unable to find user");
         }
         const favMovies = movies.filter((mv) =>
-          foundUser.FavoriteMovies.includes(mv._id)
+          foundUser.FavoriteMovies.includes(mv.id)
         );
         setFavoriteMovies(favMovies);
         setUserData({ ...foundUser, Password: "" });

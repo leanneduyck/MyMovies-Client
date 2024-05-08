@@ -28478,7 +28478,8 @@ const MainView = ()=>{
                                 columnNumber: 11
                             }, undefined),
                             /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactRouterDom.Route), {
-                                path: "/movies/:movieId",
+                                path: "/movies/:movieId" // route for search results
+                                ,
                                 element: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _jsxDevRuntime.Fragment), {
                                     children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _colDefault.default), {
                                         md: 8,
@@ -42667,7 +42668,7 @@ const ProfileView = ({ movies })=>{
             const foundUser = data.find((user)=>user._id === parsedUser._id);
             if (!foundUser) //if user not found, will trigger the catch
             throw new Error("Unable to find user");
-            const favMovies = movies.filter((mv)=>foundUser.FavoriteMovies.includes(mv._id));
+            const favMovies = movies.filter((mv)=>foundUser.FavoriteMovies.includes(mv.id));
             setFavoriteMovies(favMovies);
             setUserData({
                 ...foundUser,

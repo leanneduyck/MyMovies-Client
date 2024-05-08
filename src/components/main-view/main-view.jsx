@@ -150,7 +150,7 @@ export const MainView = () => {
             }
           />
           <Route
-            path="/movies/:movieId"
+            path="/movies/:movieId" // route for search results
             element={
               <>
                 <Col md={8}>
