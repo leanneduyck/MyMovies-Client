@@ -137,6 +137,35 @@ export const ProfileView = ({ movies }) => {
     }));
   };
 
+  // user can remove favoriteMovies from profileView
+  // /users/:Username/movies/:MovieID is my API endpoint to remove movies from FavoriteMovies array, DELETE method
+  // currently don't know if this works since favoriteMovies are not displayed in profileView
+  // added button to hopefully appear under each favoriteMovie Card for user to remove from Favorites
+  const handleRemoveFavorite = (movieId) => {
+    fetch(
+      `https://my---movies-868565568c2a.herokuapp.com/users/${user.Username}/movies/${movieId}`,
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      }
+    )
+      .then((response) => {
+        if (response.ok) {
+          setFavoriteMovies(favoriteMovies.filter((mv) => mv._id !== movieId));
+          alert(
+            "This movie has successfully been removed from your Favorites!"
+          );
+        }
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+        alert("Sorry, there was an error; please try again later.");
+      });
+  };
+
   // renders profile view with user data and favorite movies, option to update user data
   return (
     <div>
@@ -269,6 +298,13 @@ export const ProfileView = ({ movies }) => {
               favoriteMovies.map((favoriteMovie) => (
                 <Col className="mt-3 mb-3" key={favoriteMovie.id} md={3}>
                   <MovieCard movie={favoriteMovie} />
+                  <Button
+                    className="m-3"
+                    variant="outline-danger"
+                    onClick={() => handleRemoveFavorite(favoriteMovie._id)}
+                  >
+                    Remove from Favorites
+                  </Button>
                 </Col>
               ))
             ) : (
