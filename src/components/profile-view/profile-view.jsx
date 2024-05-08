@@ -6,7 +6,7 @@ import { Spinner, Form, Button, Row, Col } from "react-bootstrap";
 export const ProfileView = ({ movies }) => {
   // state variables
   const [user, setUser] = useState({});
-  const [token, setToken] = useState();
+  const [setToken] = useState();
   const [favoriteMovies, setFavoriteMovies] = useState([]);
   const [userData, setUserData] = useState({
     Username: "",

@@ -28418,7 +28418,8 @@ const MainView = ()=>{
                 children: [
                     /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactRouterDom.Routes), {
                         children: [
-                            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactRouterDom.Route), {
+                            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactRouterDom.Route // signup route
+                            ), {
                                 path: "/signup",
                                 element: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _jsxDevRuntime.Fragment), {
                                     children: user ? /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactRouterDom.Navigate), {
@@ -28445,7 +28446,8 @@ const MainView = ()=>{
                                 lineNumber: 119,
                                 columnNumber: 11
                             }, undefined),
-                            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactRouterDom.Route), {
+                            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactRouterDom.Route // login route
+                            ), {
                                 path: "/login",
                                 element: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _jsxDevRuntime.Fragment), {
                                     children: user ? /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactRouterDom.Navigate), {
@@ -28477,9 +28479,9 @@ const MainView = ()=>{
                                 lineNumber: 133,
                                 columnNumber: 11
                             }, undefined),
-                            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactRouterDom.Route), {
-                                path: "/movies/:movieId" // route for search results
-                                ,
+                            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactRouterDom.Route // search route
+                            ), {
+                                path: "/movies/:movieId",
                                 element: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _jsxDevRuntime.Fragment), {
                                     children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _colDefault.default), {
                                         md: 8,
@@ -28501,7 +28503,8 @@ const MainView = ()=>{
                                 lineNumber: 152,
                                 columnNumber: 11
                             }, undefined),
-                            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactRouterDom.Route), {
+                            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactRouterDom.Route // movieView route
+                            ), {
                                 path: "/movies/:movieId",
                                 element: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _jsxDevRuntime.Fragment), {
                                     children: !user ? /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactRouterDom.Navigate), {
@@ -28531,7 +28534,8 @@ const MainView = ()=>{
                                 lineNumber: 162,
                                 columnNumber: 11
                             }, undefined),
-                            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactRouterDom.Route), {
+                            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactRouterDom.Route // user profile route
+                            ), {
                                 path: "/users",
                                 element: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _jsxDevRuntime.Fragment), {
                                     children: !user ? /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactRouterDom.Navigate), {
@@ -28561,7 +28565,8 @@ const MainView = ()=>{
                                 lineNumber: 176,
                                 columnNumber: 11
                             }, undefined),
-                            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactRouterDom.Route), {
+                            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactRouterDom.Route // mainView route
+                            ), {
                                 path: "/",
                                 element: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _jsxDevRuntime.Fragment), {
                                     children: !user ? /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactRouterDom.Navigate), {
@@ -42643,7 +42648,7 @@ const ProfileView = ({ movies })=>{
     _s();
     // state variables
     const [user, setUser] = (0, _react.useState)({});
-    const [token, setToken] = (0, _react.useState)();
+    const [setToken] = (0, _react.useState)();
     const [favoriteMovies, setFavoriteMovies] = (0, _react.useState)([]);
     const [userData, setUserData] = (0, _react.useState)({
         Username: "",
@@ -43056,7 +43061,7 @@ const ProfileView = ({ movies })=>{
         columnNumber: 5
     }, undefined);
 };
-_s(ProfileView, "WIbpT4Fm8oeBxD3riFPFXNmz5P0=");
+_s(ProfileView, "BdYwYThJjcnYE0OHDfoB8TiDoDI=");
 _c = ProfileView;
 var _c;
 $RefreshReg$(_c, "ProfileView");
