@@ -52,6 +52,7 @@ export const ProfileView = ({ movies }) => {
   // handles updating user data
   // /users/:Username is my API endpoint to update user data, PUT method
   // currently doesn't update user data, do receive correct error message as user
+  // get error 422 unprocessable entity
   const handleUpdateUser = (e) => {
     e.preventDefault();
 
@@ -102,6 +103,7 @@ export const ProfileView = ({ movies }) => {
   // /users/:Username is my API endpoint to delete users, DELETE method
 
   // currently doesn't delete user from database, do receive correct error message as user
+  // get error 401 unauthorized
 
   const handleDeleteUser = async () => {
     try {

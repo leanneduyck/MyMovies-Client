@@ -29,11 +29,14 @@ export const MovieView = ({ movies }) => {
   };
   // connects to API, /users/:Username/movies/:MovieID is endpoint to add (POST) movies to FavoriteMovies array
   // does not add movie to favoriteMovies array in profileView or database, though success alert displays and movie is added to database
+  // get error 404 not found or 500 internal server error
   // user.FavoriteMovies is database array of favorite movies
   useEffect(() => {
     fetch(
       // "https://my---movies-868565568c2a.herokuapp.com/users/:Username/movies/:MovieID",
-      "https://my---movies-868565568c2a.herokuapp.com/users/${user.FavoriteMovies}",
+      // "https://my---movies-868565568c2a.herokuapp.com/users/${user.FavoriteMovies}",
+      "https://my---movies-868565568c2a.herokuapp.com/users/${user.Username}/movies/${movieId}",
+      // "https://my---movies-868565568c2a.herokuapp.com/users/${user.Username.{user.FavoriteMovies}}/movies/${movieId}",
 
       {
         method: "POST",
