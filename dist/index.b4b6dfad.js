@@ -41782,7 +41782,7 @@ const MovieView = ({ movies })=>{
         } else alert("This movie is already in your Favorites!");
     };
     // connects to API, /users/:Username/movies/:MovieID is endpoint to add (POST) movies to FavoriteMovies array
-    // DOES add movies to favoriteMovies array in database! and in correct user (even though profileView still shows 1st user name etc)
+    // does not add movie to favoriteMovies array in profileView or database, though success alert displays and movie is added to database
     (0, _react.useEffect)(()=>{
         fetch("https://my---movies-868565568c2a.herokuapp.com/users/:Username/movies/:MovieID", {
             method: "POST",
