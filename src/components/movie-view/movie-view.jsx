@@ -1,51 +1,122 @@
+import React, { useEffect, useState } from "react";
 import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
+import Image from "react-bootstrap/Image";
+import { useParams } from "react-router";
 
-export const MovieView = ({ movie, onBackClick }) => {
+// state variables
+export const MovieView = ({ movies }) => {
+  // initializes favoriteMovies array
+  const [favoriteMovies, setFavoriteMovies] = useState([]);
+  // accesses movieId url param
+  const { movieId } = useParams();
+  // searches all movies to render correct card via react-router
+  const movie = movies.find((movie) => movie.id === movieId);
+  // if no movie is found, return message
+  if (!movie) {
+    return <div>No movie found!</div>;
+  }
+
+  // adds movie to favoriteMovies array
+  // doesn't seem to actually add movies to array in profileView, though success alert displays
+  const addToFavorites = (movie) => {
+    if (!favoriteMovies.includes(movie.Id)) {
+      setFavoriteMovies([...favoriteMovies, movie.Id]);
+      alert("This movie has been added to your Favorites!");
+    } else {
+      alert("This movie is already in your Favorites!");
+    }
+  };
+  // connects to API, /users/:Username/movies/:MovieID is endpoint to add (POST) movies to FavoriteMovies array
+  // does not add movie to favoriteMovies array in profileView or database, though success alert displays and movie is added to database
+  // get error 404 not found or 500 internal server error
+  // user.FavoriteMovies is database array of favorite movies
+  useEffect(() => {
+    fetch(
+      "https://my---movies-868565568c2a.herokuapp.com/users/:Username/movies/:MovieID",
+      // "https://my---movies-868565568c2a.herokuapp.com/users/${user.FavoriteMovies}",
+      // "https://my---movies-868565568c2a.herokuapp.com/users/${user.Username}/movies/${movieId}",
+      // "https://my---movies-868565568c2a.herokuapp.com/users/${user.Username.{user.FavoriteMovies}}/movies/${movieId}",
+
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      }
+    )
+      .then((response) => {
+        if (response.ok) {
+          addToFavorites(movieId);
+        }
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+        alert("Error adding movie to Favorites!");
+      });
+  }, [movie]);
+
   return (
     <Row className="justify-content-md-center m-5">
       <div>
-        <img className="w-100" src={movie.image} />
+        <Image className="w-100 mb-2" src={movie.image} rounded />
       </div>
       <div>
-        <span>Title: </span>
+        <span style={{ fontWeight: "bold" }}>Title: </span>
         <span>{movie.title}</span>
       </div>
       <div>
-        <span>Release: </span>
+        <span style={{ fontWeight: "bold" }}>Release: </span>
         <span>{movie.release}</span>
       </div>
       <div>
-        <span>Description: </span>
+        <span style={{ fontWeight: "bold" }}>Description: </span>
         <span>{movie.description}</span>
       </div>
       <div>
-        <span>Rating: </span>
+        <span style={{ fontWeight: "bold" }}>Rating: </span>
         <span>{movie.rating}</span>
       </div>
       <div>
-        <span>Genre: </span>
+        <span style={{ fontWeight: "bold" }}>Genre: </span>
         <span>{movie.genre}</span>
       </div>
       <div>
-        <span>Genre Description: </span>
+        <span style={{ fontWeight: "bold" }}>Genre Description: </span>
         <span>{movie.genreDescription}</span>
       </div>
       <div>
-        <span>Director: </span>
+        <span style={{ fontWeight: "bold" }}>Director: </span>
         <span>{movie.directorName}</span>
       </div>
       <div>
-        <span>Director's Birth Year: </span>
+        <span style={{ fontWeight: "bold" }}>Director's Birth Year: </span>
         <span>{movie.directorBirthYear}</span>
       </div>
       <div>
-        <span>Director's Bio: </span>
+        <span style={{ fontWeight: "bold" }}>Director's Bio: </span>
         <span>{movie.directorBio}</span>
       </div>
-      <Button className="m-3" variant="primary" onClick={onBackClick}>
+      <Button
+        className="w-100 m-2"
+        variant="outline-primary"
+        type="submit"
+        style={{ cursor: "pointer" }}
+        href="/"
+      >
         Back to Home Page
+      </Button>
+      <Button
+        className="w-100 m-2"
+        variant="outline-secondary"
+        type="submit"
+        style={{ cursor: "pointer" }}
+        onClick={() => {
+          addToFavorites(movie);
+        }}
+      >
+        Add to Favorites!
       </Button>
     </Row>
   );

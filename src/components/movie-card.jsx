@@ -1,25 +1,29 @@
+import React from "react";
 import PropTypes from "prop-types";
-import { Button, Card } from "react-bootstrap";
+import { Card } from "react-bootstrap";
+import { Link } from "react-router-dom";
 
 // component displays MovieCard when called, uses react-bootstrap``
-export const MovieCard = ({ movie, onMovieClick }) => {
+export const MovieCard = ({ movie }) => {
   return (
-    // onClick on Card element makes entire card clickable instead of button
-    <Card
-      className="h-100"
-      style={{ cursor: "pointer" }}
-      onClick={() => onMovieClick(movie)}
+    // wrapped Card in Link to make whole movieCard clickable
+    // encodeURIComponent replaces non-alphanumeric characters with URL-friendly characters
+    // added css textDecoration to remove automatic underlining
+    <Link
+      to={`/movies/${encodeURIComponent(movie.id)}`}
+      style={{ textDecoration: "none" }}
     >
-      <Card.Img variant="top" src={movie.image} />
-      <Card.Body>
-        <Card.Title>{movie.description}</Card.Title>
-      </Card.Body>
-    </Card>
+      <Card className="h-100" style={{ cursor: "pointer" }}>
+        <Card.Img variant="top" src={movie.image} />
+        <Card.Body>
+          <Card.Text>{movie.description}</Card.Text>
+        </Card.Body>
+      </Card>
+    </Link>
   );
 };
 
 // define prop constraints for MovieCard
-// did not require all fields, just title, rating, director, I may add image to required later
 MovieCard.propTypes = {
   movie: PropTypes.shape({
     image: PropTypes.string,
@@ -33,5 +37,5 @@ MovieCard.propTypes = {
     directorBirthYear: PropTypes.string,
     directorBio: PropTypes.string,
   }).isRequired,
-  onMovieClick: PropTypes.func.isRequired,
+  onMovieClick: PropTypes.func,
 };
