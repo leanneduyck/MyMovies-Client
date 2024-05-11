@@ -155,7 +155,7 @@ export const MainView = () => {
                 {!user ? (
                   <Navigate to="/users" replace />
                 ) : (
-                  <Col md={5}>
+                  <Col md={8} className="mb-5">
                     <ProfileView movies={movies} />
                   </Col>
                 )}

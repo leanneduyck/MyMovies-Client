@@ -21,7 +21,6 @@ export const SignupView = () => {
       Password: password,
     };
     // connects to API user signup endpoint
-    // does successfully add a new user to database
     fetch("https://my---movies-868565568c2a.herokuapp.com/users/create", {
       method: "POST",
       body: JSON.stringify(data),

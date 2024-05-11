@@ -16,7 +16,6 @@ export const LoginView = ({ onLoggedIn }) => {
       Password: password,
     };
     // connects to API
-    // my API has no 'login' endpoint...just creating/updating/deleting a user...??? still able to login at this point
     fetch("https://my---movies-868565568c2a.herokuapp.com/login", {
       method: "POST",
       headers: {

@@ -3,21 +3,29 @@ import PropTypes from "prop-types";
 import { Card } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
-// component displays MovieCard when called, uses react-bootstrap``
-export const MovieCard = ({ movie }) => {
+// component displays MovieCard when called, uses react-bootstrap and css textDecoration
+// showDescription used to only show the description in MainView, vs only the image in ProfileView
+// wrapped Card in Link to make whole movieCard clickable
+// encodeURIComponent replaces non-alphanumeric characters with URL-friendly characters
+export const MovieCard = ({ movie, showDescription }) => {
   return (
-    // wrapped Card in Link to make whole movieCard clickable
-    // encodeURIComponent replaces non-alphanumeric characters with URL-friendly characters
-    // added css textDecoration to remove automatic underlining
     <Link
       to={`/movies/${encodeURIComponent(movie.id)}`}
       style={{ textDecoration: "none" }}
     >
-      <Card className="h-100" style={{ cursor: "pointer" }}>
-        <Card.Img variant="top" src={movie.image} />
-        <Card.Body>
-          <Card.Text>{movie.description}</Card.Text>
-        </Card.Body>
+      <Card className="h-100" style={{ width: "100%", cursor: "pointer" }}>
+        <div style={{ height: "100%" }}>
+          <Card.Img
+            variant="top"
+            src={movie.image}
+            style={{ width: "100%", height: "100%", objectFit: "cover" }}
+          />
+        </div>
+        {showDescription && (
+          <Card.Body>
+            <Card.Text>{movie.description}</Card.Text>
+          </Card.Body>
+        )}
       </Card>
     </Link>
   );
@@ -37,5 +45,13 @@ MovieCard.propTypes = {
     directorBirthYear: PropTypes.string,
     directorBio: PropTypes.string,
   }).isRequired,
+  // showDescription is a boolean prop
+  showDescription: PropTypes.bool,
+  // onMovieClick is a function prop
   onMovieClick: PropTypes.func,
+};
+
+// sets showDescription default prop to true
+MovieCard.defaultProps = {
+  showDescription: true,
 };

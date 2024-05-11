@@ -18,10 +18,6 @@ export const ProfileView = ({ movies }) => {
   const [isLoading, setIsLoading] = useState(true);
 
   // fetches authorized userData plus favoriteMovies from API and sets userData, copied logic from mainView
-  // currently does display correct user data, but does not display favoriteMovies even when known to be in database
-
-  //https://my---movies-868565568c2a.herokuapp.com
-  //https://my---movies-868565568c2a.herokuapp.com
   useEffect(() => {
     setIsLoading(true);
     const userFromStorage = localStorage.getItem("user");
@@ -54,13 +50,11 @@ export const ProfileView = ({ movies }) => {
 
   // handles updating user data
   // /users/:Username is my API endpoint to update user data, PUT method
-  // currently doesn't update user data, do receive correct error message as user
-  // get error 422 unprocessable entity
   const handleUpdateUser = (e) => {
     e.preventDefault();
-
     console.log(userData);
-    const password = prompt("Enter a new password");
+    // API requires password to update user data
+    const password = prompt("Please, enter your password: ");
     let updatedUserData = {
       Username: userData.Username,
       Birthday: userData.Birthday,
@@ -106,13 +100,10 @@ export const ProfileView = ({ movies }) => {
 
   // deletes users
   // /users/:Username is my API endpoint to delete users, DELETE method
-
-  // currently doesn't delete user from database, do receive correct error message as user
-  // get error 401 unauthorized
-
   const handleDeleteUser = async () => {
     try {
-      const password = prompt("Your password");
+      // API requires password to delete user
+      const password = prompt("Please, enter your password: ");
       let updatedUserData = {
         Password: password,
       };
@@ -145,6 +136,7 @@ export const ProfileView = ({ movies }) => {
     }
   };
 
+  // handles changes to user data
   const handleChange = (e) => {
     setUserData((prevState) => ({
       ...prevState,
@@ -152,10 +144,13 @@ export const ProfileView = ({ movies }) => {
     }));
   };
 
-  // user can remove favoriteMovies from profileView
+  // handles redirecting to mainView after removing a movie from favorites
+  const redirectToMainView = () => {
+    window.location.href = "/";
+  };
+
+  // user can remove favoriteMovies from profileView, and are then redirected to mainView
   // /users/:Username/movies/:MovieID is my API endpoint to remove movies from FavoriteMovies array, DELETE method
-  // currently don't know if this works since favoriteMovies are not displayed in profileView
-  // added button to hopefully appear under each favoriteMovie Card for user to remove from Favorites
   const handleRemoveFavorite = (movieId) => {
     fetch(
       `https://my---movies-868565568c2a.herokuapp.com/users/${user.Username}/movies/${movieId}`,
@@ -168,11 +163,13 @@ export const ProfileView = ({ movies }) => {
       }
     )
       .then((response) => {
+        // removes movie from favoriteMovies array
         if (response.ok) {
           setFavoriteMovies(favoriteMovies.filter((mv) => mv._id !== movieId));
           alert(
             "This movie has successfully been removed from your Favorites!"
           );
+          redirectToMainView();
         }
       })
       .catch((error) => {
@@ -292,7 +289,7 @@ export const ProfileView = ({ movies }) => {
         ) : (
           <Button
             className="m-3"
-            variant="primary"
+            variant="outline-primary"
             onClick={() => setIsEditing(true)}
           >
             Edit
@@ -308,10 +305,10 @@ export const ProfileView = ({ movies }) => {
           <Row>
             {favoriteMovies.length > 0 ? (
               favoriteMovies.map((favoriteMovie) => (
-                <Col className="mt-3 mb-3" key={favoriteMovie.id} md={3}>
-                  <MovieCard movie={favoriteMovie} />
+                <Col className="mt-3 mb-5" key={favoriteMovie.id} md={3}>
+                  <MovieCard movie={favoriteMovie} showDescription={false} />
                   <Button
-                    className="m-3"
+                    className="mt-3 mb-5 d-block mx-auto"
                     variant="outline-danger"
                     onClick={() => handleRemoveFavorite(favoriteMovie.id)}
                   >
