@@ -6,7 +6,7 @@ import { Spinner, Form, Button, Row, Col } from "react-bootstrap";
 export const ProfileView = ({ movies }) => {
   // state variables
   const [user, setUser] = useState({});
-  const [setToken] = useState();
+  const [token, setToken] = useState();
   const [favoriteMovies, setFavoriteMovies] = useState([]);
   const [userData, setUserData] = useState({
     Username: "",
@@ -19,6 +19,9 @@ export const ProfileView = ({ movies }) => {
 
   // fetches authorized userData plus favoriteMovies from API and sets userData, copied logic from mainView
   // currently does display correct user data, but does not display favoriteMovies even when known to be in database
+
+  //https://my---movies-868565568c2a.herokuapp.com
+  //https://my---movies-868565568c2a.herokuapp.com
   useEffect(() => {
     setIsLoading(true);
     const userFromStorage = localStorage.getItem("user");
@@ -47,7 +50,7 @@ export const ProfileView = ({ movies }) => {
         alert("Error fetching user data; please try again later.");
         setIsLoading(false);
       });
-  }, []);
+  }, [movies]);
 
   // handles updating user data
   // /users/:Username is my API endpoint to update user data, PUT method
@@ -57,10 +60,12 @@ export const ProfileView = ({ movies }) => {
     e.preventDefault();
 
     console.log(userData);
+    const password = prompt("Enter a new password");
     let updatedUserData = {
       Username: userData.Username,
       Birthday: userData.Birthday,
       Email: userData.Email,
+      Password: password,
     };
     //ensures empty string isn't sent back
     if (userData.Password.trim().length !== 0) {
@@ -107,6 +112,10 @@ export const ProfileView = ({ movies }) => {
 
   const handleDeleteUser = async () => {
     try {
+      const password = prompt("Your password");
+      let updatedUserData = {
+        Password: password,
+      };
       const response = await fetch(
         `https://my---movies-868565568c2a.herokuapp.com/users/${user.Username}`,
         {
@@ -115,12 +124,16 @@ export const ProfileView = ({ movies }) => {
             "Content-Type": "application/json",
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
+          body: JSON.stringify(updatedUserData),
         }
       );
       if (response.ok) {
         setUserData(null);
         setIsEditing(false);
         localStorage.clear();
+
+        setUser(null);
+        setToken(null);
         alert("User has been successfully deregistered.");
       } else {
         console.error("Error deregistering user:", error);
@@ -270,9 +283,6 @@ export const ProfileView = ({ movies }) => {
               className="m-3"
               variant="danger"
               onClick={() => {
-                setUser(null);
-                setToken(null);
-                localStorage.clear();
                 handleDeleteUser();
               }}
             >
@@ -303,7 +313,7 @@ export const ProfileView = ({ movies }) => {
                   <Button
                     className="m-3"
                     variant="outline-danger"
-                    onClick={() => handleRemoveFavorite(favoriteMovie._id)}
+                    onClick={() => handleRemoveFavorite(favoriteMovie.id)}
                   >
                     Remove from Favorites
                   </Button>

@@ -20,22 +20,15 @@ export const MovieView = ({ movies }) => {
   // adds movie to favoriteMovies array
   // doesn't seem to actually add movies to array in profileView, though success alert displays
   const addToFavorites = (movie) => {
-    if (!favoriteMovies.includes(movie.Id)) {
-      setFavoriteMovies([...favoriteMovies, movie.Id]);
-      alert("This movie has been added to your Favorites!");
-    } else {
-      alert("This movie is already in your Favorites!");
-    }
-  };
-  // connects to API, /users/:Username/movies/:MovieID is endpoint to add (POST) movies to FavoriteMovies array
-  // does not add movie to favoriteMovies array in profileView or database, though success alert displays and movie is added to database
-  // get error 404 not found or 500 internal server error
-  // user.FavoriteMovies is database array of favorite movies
-  useEffect(() => {
+    console.log({ movie });
+
+    const userFromStorage = localStorage.getItem("user");
+    const parsedUser = JSON.parse(userFromStorage);
+    console.log({ parsedUser });
     fetch(
-      "https://my---movies-868565568c2a.herokuapp.com/users/:Username/movies/:MovieID",
+      // "https://my---movies-868565568c2a.herokuapp.com/users/:Username/movies/:MovieID",
       // "https://my---movies-868565568c2a.herokuapp.com/users/${user.FavoriteMovies}",
-      // "https://my---movies-868565568c2a.herokuapp.com/users/${user.Username}/movies/${movieId}",
+      `https://my---movies-868565568c2a.herokuapp.com/users/${parsedUser.Username}/movies/${movie?.id}`,
       // "https://my---movies-868565568c2a.herokuapp.com/users/${user.Username.{user.FavoriteMovies}}/movies/${movieId}",
 
       {
@@ -48,14 +41,20 @@ export const MovieView = ({ movies }) => {
     )
       .then((response) => {
         if (response.ok) {
-          addToFavorites(movieId);
+          alert("This movie has been added to your Favorites!");
+          // addToFavorites(movieId);
         }
       })
       .catch((error) => {
         console.error("Error:", error);
         alert("Error adding movie to Favorites!");
       });
-  }, [movie]);
+  };
+  // connects to API, /users/:Username/movies/:MovieID is endpoint to add (POST) movies to FavoriteMovies array
+  // does not add movie to favoriteMovies array in profileView or database, though success alert displays and movie is added to database
+  // get error 404 not found or 500 internal server error
+  // user.FavoriteMovies is database array of favorite movies
+  // useEffect(() => {}, [movie]);
 
   return (
     <Row className="justify-content-md-center m-5">
