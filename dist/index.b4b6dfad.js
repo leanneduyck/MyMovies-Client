@@ -28606,7 +28606,7 @@ $RefreshReg$(_c, "MainView");
 }
 },{"react/jsx-dev-runtime":"iTorj","react":"21dqq","react-router-dom":"9xmpe","../movie-card.jsx":"xGR5T","../movie-view/movie-view.jsx":"ggaUx","../login-view/login-view.jsx":"9YtA0","../signup-view/signup-view.jsx":"4OGiN","../navigation-bar/navigation-bar.jsx":"bsPVM","../profile-view/profile-view.jsx":"2vVqf","react-bootstrap/Row":"cMC39","react-bootstrap/Col":"2L2I6","react-bootstrap/Spinner":"2r8jr","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"km3Ru"}],"9xmpe":[function(require,module,exports) {
 /**
- * React Router DOM v6.23.0
+ * React Router DOM v6.23.1
  *
  * Copyright (c) Remix Software Inc.
  *
@@ -29084,7 +29084,7 @@ class Deferred {
         newState.fetchers.forEach((fetcher, key)=>{
             if (fetcher.data !== undefined) fetcherData.current.set(key, fetcher.data);
         });
-        let isViewTransitionUnavailable = router.window == null || typeof router.window.document.startViewTransition !== "function";
+        let isViewTransitionUnavailable = router.window == null || router.window.document == null || typeof router.window.document.startViewTransition !== "function";
         // If this isn't a view transition or it's not available in this browser,
         // just update and be done with it
         if (!viewTransitionOpts || isViewTransitionUnavailable) {
@@ -30033,7 +30033,7 @@ let savedScrollPositions = {};
 
 },{"react":"21dqq","react-dom":"j6uA9","react-router":"dbWyW","@remix-run/router":"5ncDG","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"dbWyW":[function(require,module,exports) {
 /**
- * React Router v6.23.0
+ * React Router v6.23.1
  *
  * Copyright (c) Remix Software Inc.
  *
@@ -31159,7 +31159,7 @@ class AwaitErrorBoundary extends _react.Component {
         } else if (resolve._tracked) {
             // Already tracked promise - check contents
             promise = resolve;
-            status = promise._error !== undefined ? AwaitRenderStatus.error : promise._data !== undefined ? AwaitRenderStatus.success : AwaitRenderStatus.pending;
+            status = "_error" in promise ? AwaitRenderStatus.error : "_data" in promise ? AwaitRenderStatus.success : AwaitRenderStatus.pending;
         } else {
             // Raw (untracked) promise - track it
             status = AwaitRenderStatus.pending;
@@ -31300,7 +31300,7 @@ function createMemoryRouter(routes, opts) {
 
 },{"react":"21dqq","@remix-run/router":"5ncDG","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"5ncDG":[function(require,module,exports) {
 /**
- * @remix-run/router v1.16.0
+ * @remix-run/router v1.16.1
  *
  * Copyright (c) Remix Software Inc.
  *
@@ -34027,7 +34027,7 @@ function createStaticHandler(routes, opts) {
    * - `opts.requestContext` is an optional server context that will be passed
    *    to actions/loaders in the `context` parameter
    */ async function queryRoute(request, _temp4) {
-        let { routeId, requestContext } = _temp4 === void 0 ? {} : _temp4;
+        let { routeId, requestContext, unstable_dataStrategy } = _temp4 === void 0 ? {} : _temp4;
         let url = new URL(request.url);
         let method = request.method;
         let location = createLocation("", createPath(url), null, "default");
@@ -34048,7 +34048,7 @@ function createStaticHandler(routes, opts) {
         throw getInternalRouterError(404, {
             pathname: location.pathname
         });
-        let result = await queryImpl(request, location, matches, requestContext, null, false, match);
+        let result = await queryImpl(request, location, matches, requestContext, unstable_dataStrategy || null, false, match);
         if (isResponse(result)) return result;
         let error = result.errors ? Object.values(result.errors)[0] : undefined;
         if (error !== undefined) // If we got back result.errors, that means the loader/action threw
