@@ -27,6 +27,7 @@
         <li>-/body</li>
         </li>
     <li>Parcel to Build Project (creates "dist" folder): inside project folder, "parcel src/index.html" (command also used to deploy app every time)</li>
+    <li>(In deployment on Netlify, needs command "parcel build src/index.html"; will automatically update live site w/o manually pushing changes to Netlify.)</li>
      <li>Add state-based router libraries: "sudo npm install react-router react-router-dom --save"</li>
      <li>Install Redux: $ npm install redux --save</li>
   </ul>
