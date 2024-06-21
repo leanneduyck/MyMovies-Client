@@ -29,11 +29,11 @@ Local Setup:
 4. Install Parcel: Globally install Parcel with sudo npm install -g parcel.
 5. Install Dependencies: Install React and React DOM with npm install --save react react-dom.
 6. Configure Index.html: Link index.html to index.jsx for application entry point.
-7. Build Project: Use Parcel to build the project with parcel src/index.html.
+7. Build Project: Use Parcel to build the project with: parcel src/index.html.
 8. Add Router: Integrate state-based routing with react-router and react-router-dom.
-9. Install Redux: Manage application state with Redux using npm install redux --save.
+9. Install Redux: Manage application state with Redux using: npm install redux --save.
 
 Deployment to Netlify:
 
-1. Parcel Build: Build the project for deployment with parcel build src/index.html.
+1. Parcel Build: Build the project for deployment with: parcel build src/index.html.
 2. Netlify Deployment: Deploy automatically to Netlify using Parcel, ensuring updates reflect live.
