@@ -1,50 +1,39 @@
-<p>This is an app built using ReactJS.</p>
-<p>An un-logged-in user sees MainView with LoginView or SignupView in the NavBar.</p>
-<p>A logged-in user sees MainView with Home or ProfileView or Logout in the NavBar. MainView displays all the MovieCards. If a user clicks on a MovieCard, the user sees MovieView with complete details on the movie/director/etc, as well as a button to return to MainView and a button to add that movie to FavoriteMovies.</p>
-<p>The NavBar has a functioning search field utilizing Fuse, which allows users to not type in the exact title but still returns the correct MovieView based on the search result.</p>
-<p>Within ProfileView, a user will see the user's current data as well as a button to edit that data. Upon clicking the button, the user can edit the data. In the editing view, there is also the option to delete the user's account. Also in ProfileView, the user sees all the movies on the user's FavoriteMovies array. The user can delete movies from the array here.</p>
-<p>All of this is tied into MyMovies-Server repo, which is a RESTful API built using CRUD and includes user authentication. The database is on MongoDB Atlas. The app is hosted via Netlify.</p>
-<p>The UI is built using React Bootstrap.</p>
-<p>Website: https://main--react-mymovies.netlify.app/</p>
-<p>Techs Used:</p>
-   <ul>
-     <li>ReactJS</li>
-     <li>Parcel</li>   
-     <li>React Bootstrap</li>       
-   </ul>
-<p>Setup Instructions/Commands:</p>
-  <ul>
-    <li>Check Node is Installed: "node -v"</li>
-    <li>Initialize "package.json" file: inside project folder, "npm init"
-      <p>- remove "main: index.js"</p></li>
-    <li>.gitignore: add "node_modules", ".cache", ".parcel-cache"</li>
-    <li>Install Parcel (global): inside project folder, "sudo npm install -g parcel"</li>
-    <li>Install Packages+Dependencies: inside project folder, "npm install --save react react-dom"</li>
-    <li>Link to "index.html" file: 
-        <li>-body</li>
-          <li>---div id="root"</div></li>
-          <li>---script type="module" src="index.jsx"/script</li>
-        <li>-/body</li>
-        </li>
-    <li>Parcel to Build Project (creates "dist" folder): inside project folder, "parcel src/index.html" (command also used to deploy app every time)</li>
-    <li>(In deployment on Netlify, needs command "parcel build src/index.html"; will automatically update live site w/o manually pushing changes to Netlify.)</li>
-     <li>Add state-based router libraries: "sudo npm install react-router react-router-dom --save"</li>
-     <li>Install Redux: $ npm install redux --save</li>
-  </ul>
-  <p>Dependencies:</p>
-  <ul>
-     <li>"parcel": "^2.12.0"</li>
-     <li>"react": "^18.2.0"</li>
-     <li>"react-dom": "^18.2.0"</li>
-     <li>"react-bootstrap": "^2.10.2"</li>
-    <li> "bootstrap": "^5.3.3"</li>
-     <li>"react-router": "^6.23.0"</li>
-     <li>"react-router-dom": "^6.23.0"</li>
-  </ul>
-  <p>devDependencies:</p>
-  <ul>
-     <li>"@parcel/transformer-sass": "^2.12.0"</li>
-     <li>"process": "^0.11.10"</li>
-     <li>"prop-types": "^15.8.1"</li>
-     <li>"redux": "^4.2.0"</li>
-  </ul>
+Overview:
+This MyMovies-Client app caters to both unauthenticated and authenticated users. Upon login, users can access various views including Home, Profile, and Movie details. Key features include CRUD operations for managing user data and favorite movies, as well as integration with the MyMovies-Server API for seamless data management. It is designed as a SPA.
+
+Key Features:
+
+1. User Authentication: Secure login and signup processes for user authentication.
+2. MainView: Displays MovieCards listing all available movies.
+3. MovieView: Shows detailed information about a selected movie, with options to return to MainView or add the movie to favorites.
+4. NavBar: Includes navigation elements based on user authentication status (Login/Signup or Home/Profile/Logout).
+5. ProfileView: Allows users to view and edit their profile information, manage favorite movies, and delete their account.
+6. Search Functionality: Utilizes Fuse for a responsive search experience, enabling users to find movies by title efficiently.
+
+Website: https://main--react-mymovies.netlify.app/
+
+Technologies Used:
+
+1. ReactJS: Frontend library for building user interfaces.
+2. Parcel: Bundler for packaging the application code.
+3. React Bootstrap: UI framework for responsive design components.
+4. React Router: Library for declarative routing within the application.
+5. Redux: State management library for predictable state container.
+
+Setup Instructions:
+Local Setup:
+
+1. Check Node.js Installation: Ensure Node.js is installed using node -v.
+2. Initialize Project: Create a package.json file in the project folder with npm init.
+3. Set up .gitignore: Add node_modules, .cache, and .parcel-cache to .gitignore.
+4. Install Parcel: Globally install Parcel with sudo npm install -g parcel.
+5. Install Dependencies: Install React and React DOM with npm install --save react react-dom.
+6. Configure Index.html: Link index.html to index.jsx for application entry point.
+7. Build Project: Use Parcel to build the project with parcel src/index.html.
+8. Add Router: Integrate state-based routing with react-router and react-router-dom.
+9. Install Redux: Manage application state with Redux using npm install redux --save.
+
+Deployment to Netlify:
+
+1. Parcel Build: Build the project for deployment with parcel build src/index.html.
+2. Netlify Deployment: Deploy automatically to Netlify using Parcel, ensuring updates reflect live.
