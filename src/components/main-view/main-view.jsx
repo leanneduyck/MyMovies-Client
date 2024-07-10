@@ -189,6 +189,7 @@ export const MainView = () => {
           href="https://portfolio-leanneduyck.vercel.app/"
           target="_blank"
           rel="noopener noreferrer"
+          style={{ textDecoration: "none" }}
         >
           <u>Leanne Duyck</u>
         </a>
