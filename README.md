@@ -17,10 +17,24 @@ ServerSide GH Repo: https://github.com/leanneduyck/MyMovies-Server.git
 Technologies Used:
 
 1. ReactJS: Frontend library for building user interfaces.
-2. Parcel: Bundler for packaging the application code.
-3. React Bootstrap: UI framework for responsive design components.
-4. React Router: Library for declarative routing within the application.
-5. Redux: State management library for predictable state container.
+2. React DOM: Provides DOM-specific methods that can be used at the top level of your app to manage your React components.
+3. React Router DOM: A library for declarative routing within the application.
+4. React Bootstrap: A UI framework for responsive design components.
+5. Parcel: Bundler for packaging the application code.
+6. React Bootstrap: UI framework for responsive design components.
+7. React Router: Library for declarative routing within the application.
+8. Fuse.js: A lightweight fuzzy-search library.
+9. Fuse: A different library related to fuzzy searching.
+10. LightningCSS: A library for transforming CSS (used by Parcel).
+11. Prop-Types: A library for type-checking React props.
+12. Process: A library that provides a simple wrapper for the Node.js process module, often used for environment variables in the frontend.
+13. @parcel/watcher: A fast, low-level filesystem watcher for Parcel.
+14. @parcel/transformer-sass: A Parcel transformer for compiling Sass/SCSS files.
+15. ESLint: Tool for identifying and fixing code quality issues.
+16. Prettier: Tool for code formatting.
+17. Cross-Browser Compatibility: Ensures the app works in Chrome, Firefox, Safari, Edge, and Internet Explorer 11.
+18. Deployment: Deployed via Netlify.
+
 
 Setup Instructions:
 Local Setup:
@@ -35,7 +49,7 @@ Local Setup:
 8. Add Router: Integrate state-based routing with react-router and react-router-dom.
 9. Install Redux: Manage application state with Redux using: npm install redux --save.
 
-Deployment to Netlify:
+Deployment to Netlify.
 
 1. Parcel Build: Build the project for deployment with: parcel build src/index.html.
 2. Netlify Deployment: Deploy automatically to Netlify using Parcel, ensuring updates reflect live.
