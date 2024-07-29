@@ -22,8 +22,8 @@ export const MovieCard = ({ movie, showDescription }) => {
           />
         </div>
         {showDescription && (
-          <Card.Body>
-            <Card.Text>{movie.description}</Card.Text>
+          <Card.Body className="text-center">
+            <Card.Text>Click for more details.</Card.Text>
           </Card.Body>
         )}
       </Card>

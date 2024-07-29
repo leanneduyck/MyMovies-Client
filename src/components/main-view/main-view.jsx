@@ -184,9 +184,9 @@ export const MainView = () => {
         {isLoading && <Spinner animation="border" variant="primary" />}
       </Row>
       <p className="mt-auto mb-3 text-center">
-        Designed and developed by:{" "}
+        designed and developed by:{" "}
         <a
-          href="https://portfolio-leanneduyck.vercel.app/"
+          href="https://leanneduyck.vercel.app/"
           target="_blank"
           rel="noopener noreferrer"
           style={{ textDecoration: "none" }}

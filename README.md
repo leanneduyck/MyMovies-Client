@@ -1,5 +1,5 @@
 Overview:
-Client: This React app caters to both unauthenticated and authenticated users. Upon login, users can access various views including Home, Profile, and Movie details. Key features include CRUD operations for managing user data and favorite movies (via a custom API), as well as integration with the MyMovies-Server API for seamless data management. It is designed as a SPA and uses React Bootstrap for UI. It features dynamic search functionality powered by Fuse. Parcel handles bundling. 
+Client: This React app caters to both unauthenticated and authenticated users. Upon login, users can access various views including Home, Profile, and Movie details. Key features include CRUD operations for managing user data and favorite movies (via a custom API), as well as integration with the MyMovies-Server API for seamless data management. It is designed as a SPA and uses React Bootstrap for UI. It features dynamic search functionality powered by Fuse. Parcel handles bundling.
 This is the frontend of the app, built using the backend from MyMovies-Server.
 
 Key Features:
@@ -36,7 +36,6 @@ Technologies Used:
 17. Cross-Browser Compatibility: Ensures the app works in Chrome, Firefox, Safari, Edge, and Internet Explorer 11.
 18. Deployment: Deployed via Netlify.
 
-
 Setup Instructions:
 Local Setup:
 
@@ -49,6 +48,11 @@ Local Setup:
 7. Build Project: Use Parcel to build the project with: parcel src/index.html.
 8. Add Router: Integrate state-based routing with react-router and react-router-dom.
 9. Install Redux: Manage application state with Redux using: npm install redux --save.
+
+Cleaning:
+
+1. Clear cache by running: rm -rf .cache
+2. Reinstall node_modules: rm -rf node_modules; then npm install
 
 Deployment to Netlify.
 
