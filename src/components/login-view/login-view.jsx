@@ -20,10 +20,9 @@ export const LoginView = ({ onLoggedIn }) => {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*", // adding this to try to fix CORS error
       },
       body: JSON.stringify(data),
-      credentials: "include", // adding this to try to fix CORS error
+      // credentials: "include", // adding this to try to fix CORS error
       // transforms response into json object so can extract JWT sent by API
     })
       .then((response) => response.json())
