@@ -22,6 +22,7 @@ export const LoginView = ({ onLoggedIn }) => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(data),
+      credentials: "include", // adding this to try to fix CORS error
       // transforms response into json object so can extract JWT sent by API
     })
       .then((response) => response.json())
