@@ -26,7 +26,7 @@ export const MovieView = ({ movies }) => {
     const parsedUser = JSON.parse(userFromStorage);
     console.log({ parsedUser });
     fetch(
-      `https://my---movies-868565568c2a.herokuapp.com/users/${parsedUser.Username}/movies/${movie?.id}`,
+      `http://localhost:8080/users/${parsedUser.Username}/movies/${movie?.id}`,
       {
         method: "POST",
         headers: {

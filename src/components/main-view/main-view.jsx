@@ -33,7 +33,7 @@ export const MainView = () => {
     if (!token) return;
     setIsLoading(true);
     fetch(
-      "https://my---movies-868565568c2a.herokuapp.com/movies",
+      "http://localhost:8080/movies",
       //authorization headers
       {
         headers: { Authorization: `Bearer ${token}` },

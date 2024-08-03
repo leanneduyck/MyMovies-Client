@@ -21,7 +21,8 @@ export const SignupView = () => {
       Password: password,
     };
     // connects to API user signup endpoint
-    fetch("https://my---movies-868565568c2a.herokuapp.com/users/create", {
+    //https://my---movies-868565568c2a.herokuapp.com
+    fetch("http://localhost:8080/users/create", {
       method: "POST",
       body: JSON.stringify(data),
       headers: {
