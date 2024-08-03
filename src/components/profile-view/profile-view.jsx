@@ -22,7 +22,7 @@ export const ProfileView = ({ movies }) => {
     setIsLoading(true);
     const userFromStorage = localStorage.getItem("user");
     const parsedUser = JSON.parse(userFromStorage);
-    fetch(`http://localhost:8080/users`, {
+    fetch(`https://my---movies-868565568c2a.herokuapp.com/users`, {
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
     })
       .then((response) => response.json())
@@ -66,14 +66,17 @@ export const ProfileView = ({ movies }) => {
       updatedUserData.Password = userData.Password;
     }
 
-    fetch(`http://localhost:8080/users/${user.Username}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-      body: JSON.stringify(updatedUserData),
-    })
+    fetch(
+      `https://my---movies-868565568c2a.herokuapp.com/users/${user.Username}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+        body: JSON.stringify(updatedUserData),
+      }
+    )
       .then((response) => {
         if (response.status >= 200 && response.status < 300) {
           return response.json();
@@ -105,7 +108,7 @@ export const ProfileView = ({ movies }) => {
         Password: password,
       };
       const response = await fetch(
-        `http://localhost:8080/users/${user.Username}`,
+        `https://my---movies-868565568c2a.herokuapp.com/users/${user.Username}`,
         {
           method: "DELETE",
           headers: {
@@ -149,13 +152,16 @@ export const ProfileView = ({ movies }) => {
   // user can remove favoriteMovies from profileView, and are then redirected to mainView
   // /users/:Username/movies/:MovieID is my API endpoint to remove movies from FavoriteMovies array, DELETE method
   const handleRemoveFavorite = (movieId) => {
-    fetch(`http://localhost:8080/users/${user.Username}/movies/${movieId}`, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    })
+    fetch(
+      `https://my---movies-868565568c2a.herokuapp.com//users/${user.Username}/movies/${movieId}`,
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      }
+    )
       .then((response) => {
         // removes movie from favoriteMovies array
         if (response.ok) {

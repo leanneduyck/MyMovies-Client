@@ -12,7 +12,7 @@ Key Features:
 6. Search Functionality: Utilizes Fuse for a responsive search experience, enabling users to find movies by title efficiently.
 
 <p>Website: https://main--react-mymovies.netlify.app/</p>
-<p>ServerSide Website: http://localhost:8080/</p>
+<p>ServerSide Website: https://my---movies-868565568c2a.herokuapp.com//</p>
 <p>ServerSide GH Repo: https://github.com/leanneduyck/MyMovies-Server.git</p>
 
 Technologies Used:
