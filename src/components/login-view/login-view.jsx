@@ -17,6 +17,7 @@ export const LoginView = ({ onLoggedIn }) => {
     };
     // connects to API
     fetch(
+      // original heroku API ***COMMENT BACK IN ONCE AWS EXPERIMENT OVER***
       // "https://my---movies-868565568c2a.herokuapp.com/login",
       // local AWS testing
       // `http://34.229.9.155:8080/login`,

@@ -22,9 +22,15 @@ export const ProfileView = ({ movies }) => {
     setIsLoading(true);
     const userFromStorage = localStorage.getItem("user");
     const parsedUser = JSON.parse(userFromStorage);
-    fetch(`https://my---movies-868565568c2a.herokuapp.com/users`, {
-      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-    })
+    // original heroku API ***COMMENT BACK IN ONCE AWS EXPERIMENT OVER***
+    fetch(
+      // `https://my---movies-868565568c2a.herokuapp.com/users`,
+      // AWS experiment, is 27017 the right port to use here?
+      `http://44.223.176.178:27017/users`,
+      {
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      }
+    )
       .then((response) => response.json())
       // extracts needed info from json
       .then((data) => {
