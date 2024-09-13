@@ -153,7 +153,8 @@ export const ProfileView = ({ movies }) => {
   // /users/:Username/movies/:MovieID is my API endpoint to remove movies from FavoriteMovies array, DELETE method
   const handleRemoveFavorite = (movieId) => {
     fetch(
-      `https://my---movies-868565568c2a.herokuapp.com//users/${user.Username}/movies/${movieId}`,
+      `https://my---movies-868565568c2a.herokuapp.com/users/${user.Username}/movies/${movieId}`,
+      // `http://34.229.9.155:8080/users/${user.Username}/movies/${movieId}`,
       {
         method: "DELETE",
         headers: {

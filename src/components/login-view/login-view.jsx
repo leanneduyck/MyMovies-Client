@@ -16,15 +16,19 @@ export const LoginView = ({ onLoggedIn }) => {
       Password: password,
     };
     // connects to API
-    fetch("https://my---movies-868565568c2a.herokuapp.com/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-      // credentials: "include", // adding this to try to fix CORS error
-      // transforms response into json object so can extract JWT sent by API
-    })
+    fetch(
+      "https://my---movies-868565568c2a.herokuapp.com/login",
+      // `http://34.229.9.155:8080/login`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+        // credentials: "include", // adding this to try to fix CORS error
+        // transforms response into json object so can extract JWT sent by API
+      }
+    )
       .then((response) => response.json())
       .then((data) => {
         console.log("Login response: ", data);
