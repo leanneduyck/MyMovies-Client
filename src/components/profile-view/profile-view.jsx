@@ -154,7 +154,10 @@ export const ProfileView = ({ movies }) => {
   const handleRemoveFavorite = (movieId) => {
     fetch(
       `https://my---movies-868565568c2a.herokuapp.com/users/${user.Username}/movies/${movieId}`,
+      // local testing for AWS EC2
       // `http://34.229.9.155:8080/users/${user.Username}/movies/${movieId}`,
+      // public IPv4 of myMovies-API EC2 plus port 27017 for MongoDB???
+      // `http://44.223.176.178:27017/users/${user.Username}/movies/${movieId}`,
       {
         method: "DELETE",
         headers: {
