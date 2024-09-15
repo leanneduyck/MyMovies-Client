@@ -26,7 +26,7 @@ export const ProfileView = ({ movies }) => {
     fetch(
       // `https://my---movies-868565568c2a.herokuapp.com/users`,
       // AWS experiment, is 27017 the right port to use here?
-      `http://44.223.176.178:27017/users`,
+      `http://44.223.176.178/users`,
       {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       }

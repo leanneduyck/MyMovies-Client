@@ -22,7 +22,7 @@ export const LoginView = ({ onLoggedIn }) => {
       // local AWS testing
       // `http://34.229.9.155:8080/login`,
       // real AWS setup, public IPv4 myMovies-API EC2:MongoDB port???
-      `http://44.223.176.178:27017/login`,
+      `http://44.223.176.178/login`,
       {
         method: "POST",
         headers: {
