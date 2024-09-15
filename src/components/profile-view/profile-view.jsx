@@ -23,14 +23,9 @@ export const ProfileView = ({ movies }) => {
     const userFromStorage = localStorage.getItem("user");
     const parsedUser = JSON.parse(userFromStorage);
     // original heroku API ***COMMENT BACK IN ONCE AWS EXPERIMENT OVER***
-    fetch(
-      // `https://my---movies-868565568c2a.herokuapp.com/users`,
-      // AWS experiment, is 27017 the right port to use here?
-      `http://44.223.176.178/users`,
-      {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-      }
-    )
+    fetch(`https://my---movies-868565568c2a.herokuapp.com/users`, {
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+    })
       .then((response) => response.json())
       // extracts needed info from json
       .then((data) => {
@@ -163,7 +158,7 @@ export const ProfileView = ({ movies }) => {
       // local testing for AWS EC2
       // `http://34.229.9.155:8080/users/${user.Username}/movies/${movieId}`,
       // public IPv4 of myMovies-API EC2 plus port 27017 for MongoDB???
-      // `http://44.223.176.178:27017/users/${user.Username}/movies/${movieId}`,
+      // `https://my---movies-868565568c2a.herokuapp.com:27017/users/${user.Username}/movies/${movieId}`,
       {
         method: "DELETE",
         headers: {
