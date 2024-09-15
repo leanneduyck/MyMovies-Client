@@ -16,23 +16,15 @@ export const LoginView = ({ onLoggedIn }) => {
       Password: password,
     };
     // connects to API
-    fetch(
-      // original heroku API ***COMMENT BACK IN ONCE AWS EXPERIMENT OVER***
-      // "https://my---movies-868565568c2a.herokuapp.com/login",
-      // local AWS testing
-      // `http://34.229.9.155:8080/login`,
-      // real AWS setup, public IPv4 myMovies-API EC2:MongoDB port???
-      `http://44.223.176.178/login`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-        // credentials: "include", // adding this to try to fix CORS error
-        // transforms response into json object so can extract JWT sent by API
-      }
-    )
+    fetch(`http://44.223.176.178:8080/login`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+      // credentials: "include", // adding this to try to fix CORS error
+      // transforms response into json object so can extract JWT sent by API
+    })
       .then((response) => response.json())
       .then((data) => {
         console.log("Login response: ", data);

@@ -34,9 +34,9 @@ export const MainView = () => {
     setIsLoading(true);
     fetch(
       // original heroku API ***COMMENT BACK IN ONCE AWS EXPERIMENT OVER***
-      // "https://my---movies-868565568c2a.herokuapp.com/movies",
+      // "http://44.223.176.178:8080/movies",
       // AWS experiment, is 27017 the right port to use here?
-      `http://44.223.176.178/movies`,
+      `http://44.223.176.178:8080/movies`,
 
       //authorization headers
       {

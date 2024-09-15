@@ -23,14 +23,9 @@ export const ProfileView = ({ movies }) => {
     const userFromStorage = localStorage.getItem("user");
     const parsedUser = JSON.parse(userFromStorage);
     // original heroku API ***COMMENT BACK IN ONCE AWS EXPERIMENT OVER***
-    fetch(
-      // `https://my---movies-868565568c2a.herokuapp.com/users`,
-      // AWS experiment, is 27017 the right port to use here?
-      `http://44.223.176.178/users`,
-      {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-      }
-    )
+    fetch(`http://44.223.176.178:8080/users`, {
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+    })
       .then((response) => response.json())
       // extracts needed info from json
       .then((data) => {
@@ -72,17 +67,14 @@ export const ProfileView = ({ movies }) => {
       updatedUserData.Password = userData.Password;
     }
 
-    fetch(
-      `https://my---movies-868565568c2a.herokuapp.com/users/${user.Username}`,
-      {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-        body: JSON.stringify(updatedUserData),
-      }
-    )
+    fetch(`http://44.223.176.178:8080/users/${user.Username}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+      body: JSON.stringify(updatedUserData),
+    })
       .then((response) => {
         if (response.status >= 200 && response.status < 300) {
           return response.json();
@@ -114,7 +106,7 @@ export const ProfileView = ({ movies }) => {
         Password: password,
       };
       const response = await fetch(
-        `https://my---movies-868565568c2a.herokuapp.com/users/${user.Username}`,
+        `http://44.223.176.178:8080/users/${user.Username}`,
         {
           method: "DELETE",
           headers: {
@@ -159,7 +151,7 @@ export const ProfileView = ({ movies }) => {
   // /users/:Username/movies/:MovieID is my API endpoint to remove movies from FavoriteMovies array, DELETE method
   const handleRemoveFavorite = (movieId) => {
     fetch(
-      `https://my---movies-868565568c2a.herokuapp.com/users/${user.Username}/movies/${movieId}`,
+      `http://44.223.176.178:8080/users/${user.Username}/movies/${movieId}`,
       // local testing for AWS EC2
       // `http://34.229.9.155:8080/users/${user.Username}/movies/${movieId}`,
       // public IPv4 of myMovies-API EC2 plus port 27017 for MongoDB???
