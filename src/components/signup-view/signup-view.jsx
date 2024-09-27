@@ -22,7 +22,7 @@ export const SignupView = () => {
     };
     // connects to API user signup endpoint
     //http://44.223.176.178:8080
-    fetch("http://44.223.176.178:8080/users/create", {
+    fetch("http://52.5.87.45:8080/users/create", {
       method: "POST",
       body: JSON.stringify(data),
       headers: {
