@@ -26,7 +26,6 @@ export const MovieView = ({ movies }) => {
     const parsedUser = JSON.parse(userFromStorage);
     console.log({ parsedUser });
     fetch(
-      // `http://44.223.176.178:8080/users/${parsedUser.Username}/movies/${movie?.id}`,
       `http://52.5.87.45:8080/users/${parsedUser.Username}/movies/${movie?.id}`,
 
       {

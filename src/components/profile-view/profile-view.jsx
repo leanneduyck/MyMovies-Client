@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { MovieCard } from "../movie-card";
-import { Spinner, Form, Button, Row, Col } from "react-bootstrap";
+// adding Modal and Image imports from react-bootstrap for S3 image UI
+import { Spinner, Form, Button, Row, Col, Modal, Image } from "react-bootstrap";
 
 // profileView component: user profile, updated profile, and favorite movies
 export const ProfileView = ({ movies }) => {
@@ -17,13 +18,19 @@ export const ProfileView = ({ movies }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
+  // S3 image upload and viewing
+  const [images, setImages] = useState([]); // All uploaded images
+  const [selectedImage, setSelectedImage] = useState(null); // Image to display in modal
+  const [showImageModal, setShowImageModal] = useState(false); // Toggle modal visibility
+  const [imageFile, setImageFile] = useState(null); // Selected file for upload
+
   // fetches authorized userData plus favoriteMovies from API and sets userData, copied logic from mainView
+  // adding in fetch for user's uploaded images from S3
   useEffect(() => {
     setIsLoading(true);
     const userFromStorage = localStorage.getItem("user");
     const parsedUser = JSON.parse(userFromStorage);
-    // original heroku API ***COMMENT BACK IN ONCE AWS EXPERIMENT OVER***
-    fetch(`http://44.223.176.178:8080/users`, {
+    fetch(`http://52.5.87.45:8080/users`, {
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
     })
       .then((response) => response.json())
@@ -41,6 +48,13 @@ export const ProfileView = ({ movies }) => {
         setUserData({ ...foundUser, Password: "" });
         setUser({ ...foundUser, Password: "" });
         setIsLoading(false);
+        // fetch user's uploaded images from S3
+        fetch(`http://52.5.87.45:8080/images/${user.Username}`, {
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        })
+          .then((res) => res.json())
+          .then((imgData) => setImages(imgData))
+          .catch((error) => console.error("Error fetching images:", error));
       })
       .catch((error) => {
         console.error("Error fetching user data:", error);
@@ -67,7 +81,7 @@ export const ProfileView = ({ movies }) => {
       updatedUserData.Password = userData.Password;
     }
 
-    fetch(`http://44.223.176.178:8080/users/${user.Username}`, {
+    fetch(`http://52.5.87.45:8080/users/${user.Username}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -106,7 +120,7 @@ export const ProfileView = ({ movies }) => {
         Password: password,
       };
       const response = await fetch(
-        `http://44.223.176.178:8080/users/${user.Username}`,
+        `http://52.5.87.45:8080/users/${user.Username}`,
         {
           method: "DELETE",
           headers: {
@@ -150,20 +164,13 @@ export const ProfileView = ({ movies }) => {
   // user can remove favoriteMovies from profileView, and are then redirected to mainView
   // /users/:Username/movies/:MovieID is my API endpoint to remove movies from FavoriteMovies array, DELETE method
   const handleRemoveFavorite = (movieId) => {
-    fetch(
-      `http://44.223.176.178:8080/users/${user.Username}/movies/${movieId}`,
-      // local testing for AWS EC2
-      // `http://34.229.9.155:8080/users/${user.Username}/movies/${movieId}`,
-      // public IPv4 of myMovies-API EC2 plus port 27017 for MongoDB???
-      // `http://44.223.176.178:27017/users/${user.Username}/movies/${movieId}`,
-      {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      }
-    )
+    fetch(`http://52.5.87.45:8080/users/${user.Username}/movies/${movieId}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    })
       .then((response) => {
         // removes movie from favoriteMovies array
         if (response.ok) {
@@ -178,6 +185,23 @@ export const ProfileView = ({ movies }) => {
         console.error("Error:", error);
         alert("Sorry, there was an error; please try again later.");
       });
+  };
+
+  // handles image upload
+  const handleFileChange = (e) => {
+    setImageFile(e.target.files[0]);
+  };
+
+  // opens modal to view selected image
+  const handleImageClick = (image) => {
+    setSelectedImage(image);
+    setShowImageModal(true);
+  };
+
+  // handles closing of image modal
+  const handleCloseModal = () => {
+    setShowImageModal(false);
+    setSelectedImage(null);
   };
 
   // renders profile view with user data and favorite movies, option to update user data
@@ -298,7 +322,6 @@ export const ProfileView = ({ movies }) => {
           </Button>
         )}
       </Form>
-
       <div>
         <h1>Favorite Movies:</h1>
         {isLoading ? (
@@ -324,6 +347,61 @@ export const ProfileView = ({ movies }) => {
           </Row>
         )}
       </div>
+
+      {/* Image Upload Section */}
+      <div className="image-upload-section">
+        <h2>Upload New Image</h2>
+        <Form onSubmit={handleImageUpload}>
+          <Form.Group controlId="formFile" className="mb-3">
+            <Form.Label>Choose an image to upload</Form.Label>
+            <Form.Control type="file" onChange={handleFileChange} />
+          </Form.Group>
+          <Button variant="primary" type="submit">
+            Upload Image
+          </Button>
+        </Form>
+      </div>
+
+      {/* Image Gallery */}
+      <div className="image-gallery">
+        <h2>Your Uploaded Images</h2>
+        {images.length > 0 ? (
+          <Row>
+            {images.map((image) => (
+              <Col key={image._id} md={3} className="mb-3">
+                <Image
+                  src={image.url} // prepping for Lambda step
+                  thumbnail
+                  onClick={() => handleImageClick(image)}
+                  className="image-thumbnail"
+                />
+              </Col>
+            ))}
+          </Row>
+        ) : (
+          <p>No images uploaded yet.</p>
+        )}
+      </div>
+
+      {/* Modal to View Selected Image */}
+      <Modal show={showImageModal} onHide={handleCloseModal} centered>
+        <Modal.Header closeButton>
+          <Modal.Title>View Image</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {selectedImage && (
+            <div>
+              <Image src={selectedImage.url} fluid />
+              <p className="mt-3">Description: {selectedImage.description}</p>
+            </div>
+          )}
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleCloseModal}>
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 };
