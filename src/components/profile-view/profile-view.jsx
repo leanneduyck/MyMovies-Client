@@ -19,10 +19,11 @@ export const ProfileView = ({ movies }) => {
   const [isLoading, setIsLoading] = useState(true);
 
   // S3 image upload and viewing
-  const [images, setImages] = useState([]); // All uploaded images
-  const [selectedImage, setSelectedImage] = useState(null); // Image to display in modal
-  const [showImageModal, setShowImageModal] = useState(false); // Toggle modal visibility
-  const [imageFile, setImageFile] = useState(null); // Selected file for upload
+  const [selectedImageType, setSelectedImageType] = useState("original"); // manages selected image type
+  const [imageFile, setImageFile] = useState(null);
+  const [showImageModal, setShowImageModal] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [userImages, setUserImages] = useState([]); // holds images retrieved from the server
 
   // fetches authorized userData plus favoriteMovies from API and sets userData, copied logic from mainView
   // adding in fetch for user's uploaded images from S3
@@ -48,20 +49,16 @@ export const ProfileView = ({ movies }) => {
         setUserData({ ...foundUser, Password: "" });
         setUser({ ...foundUser, Password: "" });
         setIsLoading(false);
+
         // fetch user's uploaded images from S3
-        fetch(`http://52.5.87.45:8080/images/${user.Username}`, {
-          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-        })
-          .then((res) => res.json())
-          .then((imgData) => setImages(imgData))
-          .catch((error) => console.error("Error fetching images:", error));
+        fetchImages(selectedImageType);
       })
       .catch((error) => {
         console.error("Error fetching user data:", error);
         alert("Error fetching user data; please try again later.");
         setIsLoading(false);
       });
-  }, [movies]);
+  }, [movies, selectedImageType]);
 
   // handles updating user data
   // /users/:Username is my API endpoint to update user data, PUT method
@@ -192,13 +189,24 @@ export const ProfileView = ({ movies }) => {
     setImageFile(e.target.files[0]);
   };
 
-  // opens modal to view selected image
+  // fetches images based on the selected type
+  const fetchImages = async (type) => {
+    try {
+      const response = await fetch(`/images/${userData.Username}?type=${type}`);
+      const data = await response.json();
+      setUserImages(data); // updates with the fetched images
+    } catch (err) {
+      console.error("Error fetching images:", err);
+    }
+  };
+
+  // handles image click to view in modal
   const handleImageClick = (image) => {
     setSelectedImage(image);
     setShowImageModal(true);
   };
 
-  // handles closing of image modal
+  // handles closing of the image modal
   const handleCloseModal = () => {
     setShowImageModal(false);
     setSelectedImage(null);
@@ -362,17 +370,40 @@ export const ProfileView = ({ movies }) => {
         </Form>
       </div>
 
+      {/* Image Type Selection */}
+      <div className="image-type-selection">
+        <h3>View Uploaded Images</h3>
+        <Form.Group>
+          <Form.Label>Select Image Type:</Form.Label>
+          <Form.Control
+            as="select"
+            value={selectedImageType}
+            onChange={(e) => setSelectedImageType(e.target.value)}
+          >
+            <option value="original">Original Images</option>
+            <option value="resized">Resized Images</option>
+          </Form.Control>
+        </Form.Group>
+      </div>
+
       {/* Image Gallery */}
       <div className="image-gallery">
         <h2>Your Uploaded Images</h2>
-        {images.length > 0 ? (
+        {isLoading ? (
+          <Spinner animation="border" variant="primary" />
+        ) : userImages.length > 0 ? (
           <Row>
-            {images.map((image) => (
-              <Col key={image._id} md={3} className="mb-3">
+            {userImages.map((image) => (
+              <Col key={image} md={3} className="mb-3">
                 <Image
-                  src={image.url} // prepping for Lambda step
+                  src={`https://my-movies-react-images-bucket.s3.amazonaws.com/${image}`}
                   thumbnail
-                  onClick={() => handleImageClick(image)}
+                  onClick={() =>
+                    handleImageClick({
+                      url: `https://my-movies-react-images-bucket.s3.amazonaws.com/${image}`,
+                      description: "No description",
+                    })
+                  }
                   className="image-thumbnail"
                 />
               </Col>
