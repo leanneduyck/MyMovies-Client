@@ -16,15 +16,18 @@ export const LoginView = ({ onLoggedIn }) => {
       Password: password,
     };
     // connects to API
-    fetch(`http://52.5.87.45:8080/login`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-      // credentials: "include", // adding this to try to fix CORS error
-      // transforms response into json object so can extract JWT sent by API
-    })
+    fetch(
+      `http://mymovies-alb-1448969138.us-east-1.elb.amazonaws.com/api/login`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+        // credentials: "include", // adding this to try to fix CORS error
+        // transforms response into json object so can extract JWT sent by API
+      }
+    )
       .then((response) => response.json())
       .then((data) => {
         console.log("Login response: ", data);

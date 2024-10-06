@@ -33,7 +33,7 @@ export const MainView = () => {
     if (!token) return;
     setIsLoading(true);
     fetch(
-      `http://52.5.87.45:8080/movies`,
+      `http://mymovies-alb-1448969138.us-east-1.elb.amazonaws.com/api/movies`,
 
       //authorization headers
       {

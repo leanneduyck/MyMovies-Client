@@ -21,13 +21,16 @@ export const SignupView = () => {
       Password: password,
     };
     // connects to API user signup endpoint
-    fetch("http://52.5.87.45:8080/users/create", {
-      method: "POST",
-      body: JSON.stringify(data),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    }).then((response) => {
+    fetch(
+      "http://mymovies-alb-1448969138.us-east-1.elb.amazonaws.com/api/users/create",
+      {
+        method: "POST",
+        body: JSON.stringify(data),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    ).then((response) => {
       if (response.ok) {
         alert("You're signed up!");
         // redirects to login page after signup

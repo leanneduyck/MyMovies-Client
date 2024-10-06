@@ -26,7 +26,7 @@ export const MovieView = ({ movies }) => {
     const parsedUser = JSON.parse(userFromStorage);
     console.log({ parsedUser });
     fetch(
-      `http://52.5.87.45:8080/users/${parsedUser.Username}/movies/${movie?.id}`,
+      `http://mymovies-alb-1448969138.us-east-1.elb.amazonaws.com/api/users/${parsedUser.Username}/movies/${movie?.id}`,
 
       {
         method: "POST",
