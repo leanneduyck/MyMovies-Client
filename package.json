@@ -4,9 +4,14 @@
   "description": "",
   "scripts": {
     "dev": "parcel src/index.html",
-    "build": "parcel build src/index.html",
+    "build": "parcel build src/index.html && sudo systemctl restart nginx && sudo service nginx restart",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
+  },
+  "targets": {
+    "default": {
+      "distDir": "/var/www/vhosts/frontend/dist"
+    }
   },
   "author": "",
   "license": "ISC",

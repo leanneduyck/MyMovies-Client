@@ -212,8 +212,9 @@ export const ProfileView = ({ movies }) => {
       const formData = new FormData();
       formData.append("image", imageFile);
 
-      // or does this need to be the S3 bucket URL?
-      const uploadUrl = `http://mymovies-alb-1448969138.us-east-1.elb.amazonaws.com/api/users/${userData.Username}`;
+      // or does this need to be the S3 bucket URL???
+      // arn:aws:s3:::my-movies-react-images-bucket
+      const uploadUrl = `http://mymovies-alb-1448969138.us-east-1.elb.amazonaws.com/api/images/${userData.Username}`;
 
       const response = await fetch(uploadUrl, {
         method: "POST",
@@ -239,7 +240,9 @@ export const ProfileView = ({ movies }) => {
   // fetches images based on the selected type
   const fetchImages = async (type) => {
     try {
-      const response = await fetch(`/images/${userData.Username}?type=${type}`);
+      const response = await fetch(
+        `/api/images/${userData.Username}?type=${type}`
+      );
       const data = await response.json();
       setUserImages(data); // updates with the fetched images
     } catch (err) {
