@@ -198,6 +198,44 @@ export const ProfileView = ({ movies }) => {
     setImageFile(e.target.files[0]);
   };
 
+  // handles image upload to S3
+  const handleImageUpload = async (e) => {
+    e.preventDefault();
+
+    if (!imageFile) {
+      alert("Please select an image file to upload.");
+      return;
+    }
+
+    try {
+      // create form data to send the file in the request
+      const formData = new FormData();
+      formData.append("image", imageFile);
+
+      // or does this need to be the S3 bucket URL?
+      const uploadUrl = `http://mymovies-alb-1448969138.us-east-1.elb.amazonaws.com/api/users/${userData.Username}`;
+
+      const response = await fetch(uploadUrl, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+        body: formData,
+      });
+
+      if (response.ok) {
+        alert("Image uploaded successfully!");
+        setImageFile(null); // clear the selected file
+        fetchImages(selectedImageType); // refresh images after upload
+      } else {
+        throw new Error("Failed to upload image.");
+      }
+    } catch (error) {
+      console.error("Error uploading image:", error);
+      alert("Error uploading image; please try again later.");
+    }
+  };
+
   // fetches images based on the selected type
   const fetchImages = async (type) => {
     try {
