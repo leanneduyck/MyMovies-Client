@@ -408,10 +408,13 @@ export const ProfileView = ({ movies }) => {
 
       {/* Image Upload Section */}
       <div className="image-upload-section">
-        <h2>Upload New Image</h2>
+        <br />
+        <br />
+        <br />
+        <h3>Upload New Image</h3>
         <Form onSubmit={handleImageUpload}>
           <Form.Group controlId="formFile" className="mb-3">
-            <Form.Label>Choose an image to upload</Form.Label>
+            <Form.Label>Choose an image to upload:</Form.Label>
             <Form.Control type="file" onChange={handleFileChange} />
           </Form.Group>
           <Button variant="primary" type="submit">
@@ -438,6 +441,7 @@ export const ProfileView = ({ movies }) => {
 
       {/* Image Gallery */}
       <div className="image-gallery">
+        <br />
         <h2>Your Uploaded Images</h2>
         {isLoading ? (
           <Spinner animation="border" variant="primary" />
@@ -473,7 +477,6 @@ export const ProfileView = ({ movies }) => {
           {selectedImage && (
             <div>
               <Image src={selectedImage.url} fluid />
-              <p className="mt-3">Description: {selectedImage.description}</p>
             </div>
           )}
         </Modal.Body>
