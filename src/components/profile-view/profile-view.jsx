@@ -212,8 +212,6 @@ export const ProfileView = ({ movies }) => {
       const formData = new FormData();
       formData.append("image", imageFile);
 
-      // or does this need to be the S3 bucket URL???
-      // arn:aws:s3:::my-movies-react-images-bucket
       const uploadUrl = `http://mymovies-alb-1448969138.us-east-1.elb.amazonaws.com/api/images/${userData.Username}`;
 
       const response = await fetch(uploadUrl, {
