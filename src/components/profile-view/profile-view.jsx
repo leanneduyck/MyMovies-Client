@@ -452,6 +452,7 @@ export const ProfileView = ({ movies }) => {
                 <Image
                   src={`https://my-movies-react-images-bucket.s3.amazonaws.com/${image}`}
                   thumbnail
+                  style={{ cursor: "pointer" }}
                   onClick={() =>
                     handleImageClick({
                       url: `https://my-movies-react-images-bucket.s3.amazonaws.com/${image}`,
